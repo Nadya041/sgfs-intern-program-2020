@@ -1,11 +1,11 @@
 class Person {
     id = 0;
 
-    constructor(firstName, lastName, age, sex) {
+    constructor(firstName, lastName, age, isMale) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.sex = sex;
+        this.isMale = isMale;
         this.id = Person.incrementId();
     }
 
@@ -24,11 +24,22 @@ class Event1 {
         this.id = numberOfEvents++;
         this.name = name;
         this.isForAdults = isForAdults;
+        this.clients = [];
     }
 
 
     addClient(p) {
-        this.clients.push(p);
+        if (p.age >= 18) {
+            this.clients.push(p);
+        }
+        else {
+            if (this.isForAdults) {
+                console.log("you cant add a client under 18!")
+            }
+            else {
+                this.client.push(p);
+            }
+        }
     }
 
     removeCLient(client) {
@@ -40,11 +51,21 @@ class Event1 {
 
 var events = [];
 var event1 = new Event1("Megami Opening Party", true);
-var event2 = new Event1("Secrets Azis Live", true);
+var event2 = new Event1("Secrets Azis Live", false);
 var event3 = new Event1("Bushido Toni Storaro Live", true);
 
+var p1 = new Person("Ivan", "Bekyarov", 16, true);
+
+event1.addClient(p1);
+
+
 events.push(event1, event2, event3);
+
 listAllEvents();
+console.log ("delete event Megami Opening Party");
+deleteEventByID(0);
+listAllEvents();
+
 
 function saveAllEvents() {
     events.push(event1, event2, event3);
@@ -64,7 +85,7 @@ function listAllEvents() {
 }
 
 function deleteEventByID(id) {
-    //moje da ima i po dobur variant
+
     eventToDelete = events.find(element => element.id == id);
     index = events.indexOf(eventToDelete);
     events.splice(index, 1);
@@ -73,7 +94,7 @@ function deleteEventByID(id) {
 
 function createEvent(name, isForAdults) {
 
-    //samo e prihvanato ne e obraboteno 
+
     try {
         if (isForAdults) {
             let event = new Event1(name, true);
@@ -82,7 +103,7 @@ function createEvent(name, isForAdults) {
             let event = new Event1(name, false);
         }
     } catch (err) {
-        console.log(err);
+        console.log("Грешка");
     }
 }
 

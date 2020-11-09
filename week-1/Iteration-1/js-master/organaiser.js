@@ -27,7 +27,6 @@ class Event1 {
     }
 
 
-
     addClient(p) {
         this.clients.push(p);
     }
@@ -36,9 +35,6 @@ class Event1 {
         index = this.clients.indexOf(client);
         this.clients.splice(index, 1);
     }
-
-
-
 
 }
 

@@ -25,46 +25,84 @@ class Event1 {
         this.name = name;
         this.isForAdults = isForAdults;
         this.clients = [];
+        if (!name) {
+            throw new Error('Whoops!')
+        }
     }
 
-
+    //p = person
     addClient(p) {
         if (p.age >= 18) {
             this.clients.push(p);
+            //console.log("You just add new client to this event!")
         }
         else {
             if (this.isForAdults) {
-                console.log("you cant add a client under 18!")
+                console.log("You can't add clients under 18 to this event!")
             }
             else {
-                this.client.push(p);
+                this.clients.push(p);
             }
+        }
+    }
+    listClients() {
+        console.log("All clients: ");
+
+        for (let cl of this.clients) {
+            console.log(cl.firstName + " " + cl.lastName);
+
         }
     }
 
     removeCLient(client) {
         index = this.clients.indexOf(client);
         this.clients.splice(index, 1);
+        console.log("You just removed a client from this event!")
     }
-
 }
 
 var events = [];
-var event1 = new Event1("Megami Opening Party", true);
+/*var event1 = new Event1("Megami Opening Party", );
 var event2 = new Event1("Secrets Azis Live", false);
-var event3 = new Event1("Bushido Toni Storaro Live", true);
+var event3 = new Event1("Bushido Toni Storaro Live", true); */
 
-var p1 = new Person("Ivan", "Bekyarov", 16, true);
+var event1 = createEvent("Megami Opening Party");
+var event2 = createEvent("Secrets Azis Live", false);
+var event3 = createEvent("Bushido Toni Storaro Live", true);
+
+var people = [];
+var p1 = new Person("Ivan", "Ivanov", 16, true);
+var p2 = new Person("Mihail", "Petrov", 28, true);
+var p3 = new Person("Nadya", "Georgieva", 22, false);
+var p4 = new Person("Mariya", "Stancheva", 20, false);
+var p5 = new Person("Aycan", "Feyzila", 21, true);
+var p6 = new Person("Konstantin", "Gogov", 23, true);
+var p7 = new Person("Radoslav", "Enev", 22, true);
+var p8 = new Person("Peter", "Velickov", 32, true);
+
+people.push(p1, p2, p3, p4, p5, p6, p7, p8);
+
 
 event1.addClient(p1);
+event1.addClient(p2);
+event1.addClient(p3);
 
+event2.addClient(p4);
+event2.addClient(p5);
+event2.addClient(p6);
+event2.addClient(p7);
 
-events.push(event1, event2, event3);
+event3.addClient(p8);
+event3.addClient(p2);
+
+saveAllEvents();
 
 listAllEvents();
-console.log ("delete event Megami Opening Party");
+event2.listClients();
+
+console.log("delete event Megami Opening Party");
 deleteEventByID(0);
-listAllEvents();
+
 
 
 function saveAllEvents() {
@@ -75,11 +113,10 @@ function listAllEvents() {
     for (let ev of events) {
 
         if (ev.isForAdults) {
-            console.log(ev.name + ' 18+');
+            console.log(ev.name + " : 18+ ");
         }
         else {
-
-            console.log(ev.name + ' for all ages');
+            console.log(ev.name + " : no age restriction ");
         }
     }
 }
@@ -94,14 +131,18 @@ function deleteEventByID(id) {
 
 function createEvent(name, isForAdults) {
 
-
     try {
+        var event;
         if (isForAdults) {
-            let event = new Event1(name, true);
+            event = new Event1(name, true);
+        }
+        else if (isForAdults === undefined) {
+            event = new Event1(name, true);
         }
         else {
-            let event = new Event1(name, false);
+            event = new Event1(name, false);
         }
+        return event
     } catch (err) {
         console.log("Грешка");
     }
@@ -123,11 +164,12 @@ function addClientToAnEvent(client, event) {
     else {
         console.log("This event is 18+");
     }
+
 }
 
 function getAllCLientsByEvent(event, filterBy) {
     for (let client of event.clients) {
-        if (filterBy && sex == filterBy) {
+        if (filterBy && isMale == filterBy) {
             console.log(client);
         }
     }

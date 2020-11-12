@@ -12,6 +12,7 @@ class Person {
         this.id              = Person.incrementId();
         this.wallet          = wallet;
         this.isThisClientVip = isThisClientVip;
+        this.numberOfEvents  = 0;
     }
 
     static incrementId() {
@@ -45,26 +46,38 @@ class Event1 {
     
         //AdditionalTask 2. Saving the current date of the event
         this.currentDate = new Date().toLocaleDateString();
-
     }
+    
     //Checking if the clients have enought money in the wallet to enter in a event and adding them or not
      addClient(client) {
         if (isSystemClose) {
             console.log(" The operation can not be processed! ")
         }
-        
-        else {
-            if(client.wallet >= this.price){
+        else{
+
+            if (this.getIsClientVip()){
                 this.clientCollection.push(client);
-                client.wallet -= this.price;
-                console.log(client.firstName +  ", you are in!------------->" + " Now you have "  + client.wallet + " bgn left in your wallet! ")
-            }else{
-                console.log( client.firstName + ", you are poor go away!--->" + " You have only " + client.wallet + " bgn in your wallet! ")
+                client.numberOfEvents++;
             }
             
+            else {
+                if(client.wallet >= this.price){
+                    this.clientCollection.push(client);
+                    client.numberOfEvents++;
+                    client.wallet -= this.price;
+                    console.log(client.firstName +  ", you are in!------------->" + " Now you have "  + client.wallet + " bgn left in your wallet! ")
+                }else{
+                    console.log( client.firstName + ", you are poor go away!--->" + " You have only " + client.wallet + " bgn in your wallet! ")
+                }
+                
+            }
         }
     }
-
+    
+    getIsClientVip() {
+        return this.numberOfEvents % 5 == 0
+    }
+    
     listClients() {
         console.log("Clients of the event - ", this.name, "are: ");
 
@@ -80,10 +93,6 @@ class Event1 {
         console.log("You just removed a client from this event!")
     }
 }
-    // addVipClient(client){
-    //     var vipClietCollection = [];
-    //     this.push(client)
-    // }
 
 //Task 1. Collection of all events which are created
 var eventCollection = [];
@@ -213,7 +222,7 @@ function showBiggestEvents() {
 
 }
 
-//AdditionalTask 4. Showing all no-age-restricted events
+//AdditionalTask 4. Showing all no age restricted events
 function listAllNoAgeRestrictedParties() {
     console.log("No age restrictited partiest are : ");
     for (let ev of eventCollection) {
@@ -251,35 +260,29 @@ function listAllEventsGroupedByRestriction() {
 
 }
 
-// // AdditionalTask 6. Fitering the events by name and age restriction and displayng only the ones who follow the criterias
-// function filterByNameAndIsForAdults(name, isForAdults) {
-//     var fiterByIsForAdults = [];
-//     var fiterByIsNotForAdults = [];
-//     var filterByName = [];
+// AdditionalTask 6. Fitering the events by name and age restriction and displayng only the ones who follow the criterias
+function filterByNameAndIsForAdults(name, isForAdults) {
+    var fiterByIsForAdults    = [];
+    var filterByName          = [];
 
-//     for (let ev of eventCollection) {
+    for (let ev of eventCollection) {
 
-//         if (ev.name = "Azis") {
-//             console.log(events.indexOf('Azis'));
-//         }
-//         break;
-//     }
-//     for (let ev of eventCollection) {
+        if (ev.name.indexOf(name) > -1) {
+            filterByName.push(ev);
+        }
+    }
 
-//         if (ev.isForAdults) {
-//             fiterByIsForAdults.push(ev);
-//         }
-//         else {
-//             fiterByIsNotForAdults.push(ev);
-//         }
-//     }
-// }
+    for (let ev of filterByName) {
 
-// //Function Is the client VIP?
-// function isThisClientVip(client, events) {
+        if (ev.isForAdults == isForAdults) {
+            fiterByIsForAdults.push(ev);
+        }
+    }
 
-    
-// }
+   for (let ev of fiterByIsForAdults){
+        console.log ("Your filtered events are: " + ev.name )
+   }
+}
 
 //We create our events here:
 var event1 = createEvent("Megami Grand Opening", true, 15);
@@ -319,12 +322,12 @@ event3.addClient(p8);
 event3.addClient(p2);
 
 //Adding clients to event4
-event3.addClient(p2);
-event3.addClient(p8);
+event4.addClient(p2);
+event4.addClient(p8);
 
 //Adding clients to event5
-event3.addClient(p3);
-event3.addClient(p2);
+event5.addClient(p3);
+event5.addClient(p2);
 
 
 //Displaying all client
@@ -363,7 +366,7 @@ toggleSystemClose();
 //Displaying all events grouped by age restriction
 listAllEventsGroupedByRestriction();
 
-//filterByNameAndIsForAdults("Secrets Azis Live", false)
+filterByNameAndIsForAdults("Secrets Azis Live", false)
 
 
 

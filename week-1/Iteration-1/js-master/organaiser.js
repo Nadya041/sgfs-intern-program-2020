@@ -48,7 +48,11 @@ class Event1 {
         this.currentDate = new Date().toLocaleDateString();
     }
     
+    //Cheking is the system open
+    //Cheking if the client is VIP and if it is - adding him/her to the event for free
     //Checking if the clients have enought money in the wallet to enter in a event and adding them or not
+    //Every time we add a client to an event we also update the count of the events that he/she went 
+
      addClient(client) {
         if (isSystemClose) {
             console.log(" The operation can not be processed! ")
@@ -73,8 +77,10 @@ class Event1 {
             }
         }
     }
-    
-    getIsClientVip() {
+
+   //Cheking if the client is VIP by Modulus Division with 5 on all client' events
+   // In this way every time when the result is 0 the client is VIP
+     getIsClientVip() {
         return this.numberOfEvents % 5 == 0
     }
     
@@ -97,7 +103,7 @@ class Event1 {
 //Task 1. Collection of all events which are created
 var eventCollection = [];
 
-//Task 2. Listing of all events with all the information
+//Task 2. Listing of all events with all the information for them
 function listAllEvents() {
     for (let ev of eventCollection) {
 
@@ -117,12 +123,11 @@ function deleteEventByID(id) {
         if (ev.id == id) {
             eventCollection.splice(eventCollection.indexOf(ev), 1);
             console.log("delete event: ", eventToDelete.name);
-
         }
     }
 }
 
-//Task 4. Creating event with name and age-restriction parameters
+//Task 4. Creating event with name, age restriction and price parameters
 function createEvent(name, isForAdults, price) {
 
     if (isSystemClose) {
@@ -133,6 +138,7 @@ function createEvent(name, isForAdults, price) {
             if (!name) {
                 throw new Error(" Error : There is no name of the event! ")
             }
+
             var event;
 
             if (isForAdults) {
@@ -146,7 +152,7 @@ function createEvent(name, isForAdults, price) {
             return event;
 
         } catch (err) {
-            event = new Event1('event ' + eventCollection.length, false);
+            event = new Event1( " event " + eventCollection.length, false);
             eventCollection.push(event);
             return event;
         }
@@ -233,10 +239,11 @@ function listAllNoAgeRestrictedParties() {
     }
 }
 
-//AdditionalTask 5. Grouping the events by age restriction (*-18+ ; #no age restriction)
+//AdditionalTask 5. Grouping the events by age restriction ( " * " for 18+ ;  " # " for no age restriction)
 function listAllEventsGroupedByRestriction() {
-    var allRestrictedEvents = [];
+    var allRestrictedEvents   = [];
     var allNoRestrictedEvents = [];
+    
     for (let ev of eventCollection) {
 
         if (ev.isForAdults) {
@@ -360,12 +367,10 @@ toggleSystemClose();
 //Trying to add client to event3
 event3.addClient(p8);
 
-//Closing system
-toggleSystemClose();
-
 //Displaying all events grouped by age restriction
 listAllEventsGroupedByRestriction();
 
+//Filtering by name and age restriction
 filterByNameAndIsForAdults("Secrets Azis Live", false)
 
 

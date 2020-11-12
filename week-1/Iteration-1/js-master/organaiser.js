@@ -23,12 +23,14 @@ var allCLients = [];
 
 class Event1 {
     id;
-    clients = Array < Person > [];
+    clientCollection = Array < Person > [];
+
     constructor(name, isForAdults) {
         this.id = numberOfEvents++;
         this.name = name;
         this.isForAdults = isForAdults;
-        this.clients = [];
+        this.clientCollection = [];
+
         //AdditionalTask 2. Saving the current date of the event
         this.currentDate = new Date().toLocaleDateString();
     }
@@ -41,32 +43,32 @@ class Event1 {
             if (allCLients.indexOf(client) == -1) {
                 allCLients.push(client);
             }
-            this.clients.push(client);
+            this.clientCollection.push(client);
         }
     }
 
     listClients() {
         console.log("Clients of the event - ", this.name, "are: ");
 
-        for (let cl of this.clients) {
+        for (let cl of this.clientCollection) {
             console.log(cl.firstName + " " + cl.lastName);
 
         }
     }
 
     removeCLient(client) {
-        index = this.clients.indexOf(client);
-        this.clients.splice(index, 1);
+        index = this.clientCollection.indexOf(client);
+        this.clientCollection.splice(index, 1);
         console.log("You just removed a client from this event!")
     }
 }
 
 //Task 1. Collection of all events which are created
-var events = [];
+var eventCollection = [];
 
 //Task 2. Listing of all events with all the information
 function listAllEvents() {
-    for (let ev of events) {
+    for (let ev of eventCollection) {
 
         if (ev.isForAdults) {
             console.log(ev.name + " : 18+ " + "Date: ", ev.currentDate);
@@ -80,9 +82,9 @@ function listAllEvents() {
 //Task 3. Deleting event by ID
 function deleteEventByID(id) {
 
-    for (let ev of events) {
+    for (let ev of eventCollection) {
         if (ev.id == id) {
-            events.splice(events.indexOf(ev), 1);
+            eventCollection.splice(eventCollection.indexOf(ev), 1);
             console.log("delete event: ", eventToDelete.name);
 
         }
@@ -91,6 +93,7 @@ function deleteEventByID(id) {
 
 //Task 4. Creating event with name and age-restriction parameters
 function createEvent(name, isForAdults) {
+
     if (isSystemClose) {
         console.log("The operation can not be processed! ")
     }
@@ -107,13 +110,13 @@ function createEvent(name, isForAdults) {
             else {
                 event = new Event1(name, false);
             }
-            events.push(event);
-            // console.log('event: ', event.name);
-            // console.log('date: ', event.currentDate);
+            eventCollection.push(event);
+
             return event;
+
         } catch (err) {
-            event = new Event1('event ' + events.length, false);
-            events.push(event);
+            event = new Event1('event ' + eventCollection.length, false);
+            eventCollection.push(event);
             return event;
         }
     }
@@ -122,7 +125,8 @@ function createEvent(name, isForAdults) {
 
 //Task 5. Updating event by ID
 function updateEventById(id, name, isForAdults) {
-    eventToUpdate = events.find(element => element.id == id);
+
+    eventToUpdate = eventCollection.find(element => element.id == id);
     if (name) {
         eventToUpdate.name(name);
     }
@@ -143,7 +147,8 @@ function addClientToAnEvent(client, event) {
 
 //Task 7. Listing all clients on one event and filtering them by gender
 function getAllCLientsByEvent(event, filterBy) {
-    for (let client of event.clients) {
+
+    for (let client of event.clientCollection) {
         if (filterBy && isMale == filterBy) {
             console.log(client);
         }
@@ -162,11 +167,12 @@ function toggleSystemClose() {
 
 //AdditionalTask 3. Showing the bigges event and displaying messages if there is no clients and if they are with equal number of clients
 function showBiggestEvents() {
+
     var largestNumberOfPeople = 0;
 
-    for (let ev of events) {
-        if (ev.clients.length > largestNumberOfPeople) {
-            largestNumberOfPeople = ev.clients.length;
+    for (let ev of eventCollection) {
+        if (ev.clientCollection.length > largestNumberOfPeople) {
+            largestNumberOfPeople = ev.clientCollection.length;
         }
 
     }
@@ -175,7 +181,7 @@ function showBiggestEvents() {
     }
 
     else {
-        var biggestParties = events.filter(ev => ev.clients.length == largestNumberOfPeople)
+        var biggestParties = eventCollection.filter(ev => ev.clientCollection.length == largestNumberOfPeople)
         console.log("The biggest parties are " + biggestParties.length + " and they are with " + largestNumberOfPeople + " people!")
         for (let ev of biggestParties) {
             console.log(ev.name)
@@ -188,7 +194,7 @@ function showBiggestEvents() {
 //AdditionalTask 4. Showing all no-age-restricted events
 function listAllNoAgeRestrictedParties() {
     console.log("No age restrictited partiest are : ");
-    for (let ev of events) {
+    for (let ev of eventCollection) {
 
         if (!ev.isForAdults) {
             console.log(ev.name);
@@ -198,9 +204,9 @@ function listAllNoAgeRestrictedParties() {
 
 //AdditionalTask 5. Grouping the events by age restriction (*-18+ ; #no age restriction)
 function listAllEventsGroupedByRestriction() {
-    var allRestrictedEvents = [];
+    var allRestrictedEvents   = [];
     var allNoRestrictedEvents = [];
-    for (let ev of events) {
+    for (let ev of eventCollection) {
 
         if (ev.isForAdults) {
             allRestrictedEvents.push(ev);
@@ -229,14 +235,14 @@ function listAllEventsGroupedByRestriction() {
 //     var fiterByIsNotForAdults = [];
 //     var filterByName = [];
 
-//     for (let ev of events) {
+//     for (let ev of eventCollection) {
 
 //         if (ev.name = "Azis") {
 //             console.log(events.indexOf('Azis'));
 //         }
 //         break;
 //     }
-//     for (let ev of events) {
+//     for (let ev of eventCollection) {
 
 //         if (ev.isForAdults) {
 //             fiterByIsForAdults.push(ev);
@@ -247,6 +253,7 @@ function listAllEventsGroupedByRestriction() {
 //     }
 // }
 
+//We create our events here:
 var event1 = createEvent("Megami Grand Opening", true);
 var event2 = createEvent("Secrets Azis Live", false);
 var event3 = createEvent("Bushido Toni Storaro Live", true);
@@ -254,7 +261,7 @@ var event4 = createEvent("Bedroom 100 Kila", true);
 var event5 = createEvent("The One Suzanita", false);
 
 
-
+//We create our clients here:
 var p1 = new Person("Ivan", "Ivanov", 16, true);
 var p2 = new Person("Mihail", "Petrov", 28, true);
 var p3 = new Person("Nadya", "Georgieva", 22, false);
@@ -264,37 +271,61 @@ var p6 = new Person("Konstantin", "Gogov", 23, true);
 var p7 = new Person("Radoslav", "Enev", 22, true);
 var p8 = new Person("Peter", "Velickov", 32, true);
 
+//Filling our array of clients
 allCLients.push(p1, p2, p3, p4, p5, p6, p7);
 
-
+//Adding clients to event1
 event1.addClient(p1);
 event1.addClient(p2);
 event1.addClient(p3);
 event1.addClient(p5);
 
-
+//Adding clients to event2
 event2.addClient(p4);
 event2.addClient(p5);
 event2.addClient(p6);
 event2.addClient(p7);
 
+//Adding clients to event3
 event3.addClient(p8);
 event3.addClient(p2);
 
+//Displaying all client
 listAllEvents();
+
+//Displaying all clients in event2
 event2.listClients();
 
+//Deleting event by ID 15 (no such event)
 deleteEventByID(15);
 
+//Displaying all no age restricted events
 listAllNoAgeRestrictedParties()
+
+//Displaying the event with most clients
 showBiggestEvents();
+
+//Closing system
 toggleSystemClose();
+
+//Trying to add client to event3
 event3.addClient(p8);
+
+//System is open
 console.log('The system is open now!');
+
+//Closing system
 toggleSystemClose();
+
+//Trying to add client to event3
 event3.addClient(p8);
+
+//Closing system
 toggleSystemClose();
+
+//Displaying all events grouped by age restriction
 listAllEventsGroupedByRestriction();
+
 //filterByNameAndIsForAdults("Secrets Azis Live", false)
 
 

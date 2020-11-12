@@ -1,16 +1,17 @@
 var numberOfEvents = 0;
-var isSystemClose = false;
-
+var isSystemClose  = false;
 
 class Person {
     id = 0;
 
-    constructor(firstName, lastName, age, isMale) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.age = age;
-        this.isMale = isMale;
-        this.id = Person.incrementId();
+    constructor(firstName, lastName, age, isMale, wallet, isThisClientVip) {
+        this.firstName       = firstName;
+        this.lastName        = lastName;
+        this.age             = age;
+        this.isMale          = isMale;
+        this.id              = Person.incrementId();
+        this.wallet          = wallet;
+        this.isThisClientVip = isThisClientVip;
     }
 
     static incrementId() {
@@ -25,25 +26,42 @@ class Event1 {
     id;
     clientCollection = Array < Person > [];
 
-    constructor(name, isForAdults) {
-        this.id = numberOfEvents++;
-        this.name = name;
-        this.isForAdults = isForAdults;
+    constructor(name, isForAdults, price) {
+        this.id               = numberOfEvents++;
+        this.name             = name;
+        this.isForAdults      = isForAdults;
         this.clientCollection = [];
+        this.price            = price;
 
+        if (price) {
+            this.price = price
+            this.name  = " $ " + name
+        }
+
+        else {
+            this.price = 0;
+            this.name  = " ! " + name
+        }
+    
         //AdditionalTask 2. Saving the current date of the event
         this.currentDate = new Date().toLocaleDateString();
-    }
 
-    addClient(client) {
+    }
+    //Checking if the clients have enought money in the wallet to enter in a event and adding them or not
+     addClient(client) {
         if (isSystemClose) {
-            console.log("The operation can not be processed! ")
+            console.log(" The operation can not be processed! ")
         }
+        
         else {
-            if (allCLients.indexOf(client) == -1) {
-                allCLients.push(client);
+            if(client.wallet >= this.price){
+                this.clientCollection.push(client);
+                client.wallet -= this.price;
+                console.log(client.firstName +  ", you are in!------------->" + " Now you have "  + client.wallet + " bgn left in your wallet! ")
+            }else{
+                console.log( client.firstName + ", you are poor go away!--->" + " You have only " + client.wallet + " bgn in your wallet! ")
             }
-            this.clientCollection.push(client);
+            
         }
     }
 
@@ -62,6 +80,10 @@ class Event1 {
         console.log("You just removed a client from this event!")
     }
 }
+    // addVipClient(client){
+    //     var vipClietCollection = [];
+    //     this.push(client)
+    // }
 
 //Task 1. Collection of all events which are created
 var eventCollection = [];
@@ -71,10 +93,10 @@ function listAllEvents() {
     for (let ev of eventCollection) {
 
         if (ev.isForAdults) {
-            console.log(ev.name + " : 18+ " + "Date: ", ev.currentDate);
+            console.log( ev.name  + " : You must be 18+    | " + " Date: ", ev.currentDate, " | Price: " + ev.price + " bgn" );
         }
         else {
-            console.log(ev.name + " : no age restriction " + "Date: ", ev.currentDate);
+            console.log( ev.name  + " : No age restriction | " + " Date: ", ev.currentDate, " | Price: " + ev.price + " bgn");
         }
     }
 }
@@ -92,7 +114,7 @@ function deleteEventByID(id) {
 }
 
 //Task 4. Creating event with name and age-restriction parameters
-function createEvent(name, isForAdults) {
+function createEvent(name, isForAdults, price) {
 
     if (isSystemClose) {
         console.log("The operation can not be processed! ")
@@ -105,10 +127,10 @@ function createEvent(name, isForAdults) {
             var event;
 
             if (isForAdults) {
-                event = new Event1(name, true);
+                event = new Event1(name, true, price);
             }
             else {
-                event = new Event1(name, false);
+                event = new Event1(name, false, price);
             }
             eventCollection.push(event);
 
@@ -160,7 +182,7 @@ function removeCLientOfAnEvent(event, client) {
     event.removeClient(client);
 }
 
-//AdditionalTask 1. Stop adding clients or events on central level
+//AdditionalTask 1. Stop and start adding clients or events on central level
 function toggleSystemClose() {
     isSystemClose = !isSystemClose;
 }
@@ -204,7 +226,7 @@ function listAllNoAgeRestrictedParties() {
 
 //AdditionalTask 5. Grouping the events by age restriction (*-18+ ; #no age restriction)
 function listAllEventsGroupedByRestriction() {
-    var allRestrictedEvents   = [];
+    var allRestrictedEvents = [];
     var allNoRestrictedEvents = [];
     for (let ev of eventCollection) {
 
@@ -229,8 +251,8 @@ function listAllEventsGroupedByRestriction() {
 
 }
 
-//AdditionalTask 6. Fitering the events by name and age restriction and displayng only the ones who follow the criterias
-//function filterByNameAndIsForAdults(name, isForAdults) {
+// // AdditionalTask 6. Fitering the events by name and age restriction and displayng only the ones who follow the criterias
+// function filterByNameAndIsForAdults(name, isForAdults) {
 //     var fiterByIsForAdults = [];
 //     var fiterByIsNotForAdults = [];
 //     var filterByName = [];
@@ -253,23 +275,29 @@ function listAllEventsGroupedByRestriction() {
 //     }
 // }
 
+// //Function Is the client VIP?
+// function isThisClientVip(client, events) {
+
+    
+// }
+
 //We create our events here:
-var event1 = createEvent("Megami Grand Opening", true);
-var event2 = createEvent("Secrets Azis Live", false);
-var event3 = createEvent("Bushido Toni Storaro Live", true);
+var event1 = createEvent("Megami Grand Opening", true, 15);
+var event2 = createEvent("Secrets Azis Live", false, 20);
+var event3 = createEvent("Bushido Fiki Live", true, 10);
 var event4 = createEvent("Bedroom 100 Kila", true);
-var event5 = createEvent("The One Suzanita", false);
+var event5 = createEvent("The One Suzanita", false, 50);
 
 
 //We create our clients here:
-var p1 = new Person("Ivan", "Ivanov", 16, true);
-var p2 = new Person("Mihail", "Petrov", 28, true);
-var p3 = new Person("Nadya", "Georgieva", 22, false);
-var p4 = new Person("Mariya", "Stancheva", 20, false);
-var p5 = new Person("Aycan", "Feyzila", 21, true);
-var p6 = new Person("Konstantin", "Gogov", 23, true);
-var p7 = new Person("Radoslav", "Enev", 22, true);
-var p8 = new Person("Peter", "Velickov", 32, true);
+var p1 = new Person("Ivan", "Ivanov", 16, true, 100);
+var p2 = new Person("Mihail", "Petrov", 28, true, 50);
+var p3 = new Person("Nadya", "Georgieva", 22, false, 68);
+var p4 = new Person("Mariya", "Stancheva", 20, false, 45);
+var p5 = new Person("Aycan", "Feyzila", 21, true, 5);
+var p6 = new Person("Konstantin", "Gogov", 23, true, 1);
+var p7 = new Person("Radoslav", "Enev", 22, true, 3);
+var p8 = new Person("Peter", "Velickov", 32, true, 75);
 
 //Filling our array of clients
 allCLients.push(p1, p2, p3, p4, p5, p6, p7);
@@ -284,11 +312,20 @@ event1.addClient(p5);
 event2.addClient(p4);
 event2.addClient(p5);
 event2.addClient(p6);
-event2.addClient(p7);
+event2.addClient(p2);
 
 //Adding clients to event3
 event3.addClient(p8);
 event3.addClient(p2);
+
+//Adding clients to event4
+event3.addClient(p2);
+event3.addClient(p8);
+
+//Adding clients to event5
+event3.addClient(p3);
+event3.addClient(p2);
+
 
 //Displaying all client
 listAllEvents();
@@ -327,6 +364,11 @@ toggleSystemClose();
 listAllEventsGroupedByRestriction();
 
 //filterByNameAndIsForAdults("Secrets Azis Live", false)
+
+
+
+
+
 
 
 

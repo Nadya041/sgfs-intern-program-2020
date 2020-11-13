@@ -15,18 +15,28 @@
     <div> 
         
         <button onclick="showAllEvents()" id="action--show-all-events">Show all events</button>
-       
+        <div id="test"></div>
+        <div
+        
+        id="addDataHere">
+
     </div>
 
-    <div> 
-        <input id="add-event" type = "text" value="Type an event to add">
-        <button id="action--add-event">Add</button>
-         <div
-            id="addDataHere">
-        </div>
-    </div>
-  
+    <input type="text" id="eventName" autofocus>
+    <button type="button" onclick="addData();">Add New Event</button> <br>
 
-    <script src='./organaiser.js'></script>
+    <table>
+        <tr>
+            <th>New Events</th>
+        </tr>
+        <tbody id="rows">
+            <tr>
+                <td>  </td>
+            </tr>
+        </tbody>
+    </table>
+
+    </div>
+     <script src='./organaiser.js'></script>
 </body>
 </html>

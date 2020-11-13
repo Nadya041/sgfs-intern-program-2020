@@ -3,6 +3,18 @@
 var showAllEvents          = document.getElementById("action--show-all-events");
 let allData                = document.getElementById("addDataHere");
 
+function addData(){
+    var eventName = document.getElementById("eventName").value;
+    var newRow = document.createElement("tr");
+    var newCell = document.createElement("td");
+    newCell.innerHTML = eventName;
+    newRow.append(newCell);
+    document.getElementById("rows").appendChild(newRow);
+    document.getElementById("eventName").value = '';
+  
+  
+  }
+
 showAllEvents.addEventListener('click', () => {
     allData.innerHTML = "";
 

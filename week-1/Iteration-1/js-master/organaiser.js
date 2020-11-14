@@ -48,27 +48,27 @@ class Event1 {
         this.currentDate = new Date().toLocaleDateString();
     }
     
-    //Cheking is the system open
-    //Cheking if the client is VIP and if it is - adding him/her to the event for free
-    //Checking if the clients have enought money in the wallet to enter in a event and adding them or not
-    //Every time we add a client to an event we also update the count of the events that he/she went 
+    
+   
+    //Adding clients
+   
 
      addClient(client) {
-        if (isSystemClose) {
+        if (isSystemClose) { //Cheking is the system open
             console.log(" The operation can not be processed! ")
         }
         else{
 
-            if (this.getIsClientVip()){
-                this.clientCollection.push(client);
-                client.numberOfEvents++;
+            if (this.getIsClientVip()){              //Cheking if the client is VIP and if it is - adding him/her to the event for free
+                this.clientCollection.push(client); // adding him to the event
+                client.numberOfEvents++;           // update the count of the events that he/she went 
             }
             
-            else {
-                if(client.wallet >= this.price){
-                    this.clientCollection.push(client);
-                    client.numberOfEvents++;
-                    client.wallet -= this.price;
+            else { 
+                if(client.wallet >= this.price){         //if the clients have enought money in the wallet to enter we add him
+                    this.clientCollection.push(client); // adding him to the event
+                    client.numberOfEvents++;           // update the count of the events that he/she went 
+                    client.wallet -= this.price;      // taking the price for the event out of his wallet
                     console.log(client.firstName +  ", you are in!------------->" + " Now you have "  + client.wallet + " bgn left in your wallet! ")
                 }else{
                     console.log( client.firstName + ", you are poor go away!--->" + " You have only " + client.wallet + " bgn in your wallet! ")
@@ -78,10 +78,10 @@ class Event1 {
         }
     }
 
-   //Cheking if the client is VIP by Modulus Division with 5 on all client' events
-   // In this way every time when the result is 0 the client is VIP
+   //Cheking if the client is VIP 
+   
      getIsClientVip() {
-        return this.numberOfEvents % 5 == 0
+        return this.numberOfEvents % 5 == 0 // every time when the result is 0 the client is VIP
     }
     
     listClients() {
@@ -174,11 +174,18 @@ function updateEventById(id, name, isForAdults) {
 
 //Task 6. Adding clients to an existing event
 function addClientToAnEvent(client, event) {
-    if ((event.isForAdults && client.age >= 18) || !event.isForAdults)
-        event.addClientToAnEvent(client);
-    else {
-        console.log("This event is 18+");
+
+    if(client.age < 18){
+        return console.log(" This event is 18+ !");
     }
+
+    event.addClientToAnEvent(client);
+
+    // if ((event.isForAdults && client.age >= 18) || !event.isForAdults)
+    //     event.addClientToAnEvent(client);
+    // else {
+    //     console.log("This event is 18+");
+    // }
 
 }
 
@@ -219,7 +226,7 @@ function showBiggestEvents() {
 
     else {
         var biggestParties = eventCollection.filter(ev => ev.clientCollection.length == largestNumberOfPeople)
-        console.log("The biggest parties are " + biggestParties.length + " and they are with " + largestNumberOfPeople + " people!")
+        console.log(" The biggest events are " + biggestParties.length + "  with " + largestNumberOfPeople + " people!")
         for (let ev of biggestParties) {
             console.log(ev.name)
         }

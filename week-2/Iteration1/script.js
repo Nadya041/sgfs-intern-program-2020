@@ -1,6 +1,7 @@
 var eventCollection = [];
 
 var EventManager = {
+
     eventCollection : [],
 
     addEvent : function (eventObject){
@@ -12,12 +13,12 @@ var EventManager = {
     }
 };
 
-var createEvent = function (eventObject){
+var createEvent = function (eventObject) {
 
     return{
         name            : eventObject.name,
         price           : eventObject.price,
-        isRestricted    : false
+        date            : eventObject.date
 
     }
 };

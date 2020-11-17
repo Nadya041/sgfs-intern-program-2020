@@ -1,40 +1,73 @@
-var actionAddEvent  = document.getElementById("action--add-event");
-var eventNameInput  = document.getElementById("event-name");
-var eventPriceInput = document.getElementById("event-price");
-var eventDateInput = document.getElementById("event-date");
+const actionAddEvent  = document.getElementById("action--add-event");
+const eventNameInput  = document.getElementById("event-name");
+const eventPriceInput = document.getElementById("event-price");
+const eventDateInput  = document.getElementById("event-date");
+const eventAgeInput   = document.getElementById("event-age");
+const eventListLayout = document.getElementById("event-list--layout");
 
-var eventListComponent = document.getElementById("event-list");
+const renderEventList = () =>{
+    
 
-var getDomEventCollection = function(){
+const eventCollection =  EventManager.getEventCollection();
 
-    var eventCollection =  EventManager.getEventCollection();
+    // if(eventListLayout.length == 0 ){
+    //     return '<div> No party </div>';
+    // }
 
-    if(eventCollection.length == 0 ){
-        return '<div> No party </div>';
-    }
 
-     //Render all events
-   var template        = [];
-   for(var i = 0; i < eventCollection.length; i++) {
-      template.push(`<div data-possition= " ${i}  "class="event-item">${eventCollection[i].name} - ${eventCollection[i].price} - ${eventCollection[i].date}</div>`)
-   }
+var template        = [ `<table>
+                       <tbody>`];
+for(var i = 0; i < eventCollection.length; i++) {
+
+    var eventName  = eventCollection[i].name    || '[No name]'
+    var eventAge   = eventCollection[i].age     || '[Child friendly]';
+    var eventPrice = eventCollection[i].price   || '[free]';
+    var eventDate  = eventCollection[i].date    || '[No date yet]';
+
+   template.push( `<tr>
+                        <td>  
+                        ${eventName} 
+                        </td>
+                        <td> 
+                        ${eventPrice} лв 
+                        </td>
+                        <td>  
+                        ${eventDate} 
+                        </td>
+                        <td>  
+                        ${eventAge}
+                        </td>
+                        <td>  
+                        <button action = "edit" item-position="${i}" class="event-item-edit--action" >Edit</button>   
+                        </td>
+                        <td>  
+                        <button action = "delete" item-position="${i}" class="event-item-delete--action" >Delete</button>
+                        </td>
+                  </tr>`);
+
+}
+template.push(`</tbody>
+            </table>`);
+eventListLayout.innerHTML = template.join('');
+
+var eventItemDomCollection = document.getElementsByClassName("event-item-edit--action")
+var eventItemDomCollection = document.getElementsByClassName("event-item-delete--action")
+
+
+
+for(var i = 0; i < eventItemDomCollection.length; i++){
+    eventItemDomCollection[i].addEventListener('click', (e)=>{
+
+     var eventIndex = e.target.getAttribute('item-position');
+     console.log(EventManager.getEvent(eventIndex)) ;
+    });
+}
    
-   return template.join('');
 };
 
 var renderEventCollection = function(){
 
-
-
-    eventListComponent.innerHTML = getDomEventCollection();
- //  var eventElementCollection    = document.getElementsByClassName("event-item")
-    
-    // for(var i = 0; i< eventElementCollection.length; i++){
-
-    //    eventElementCollection.addEventListener('click', function(){
-    //         console.log("item is selected");
-    //     });
-    // }
+    eventListLayout.innerHTML = getDomEventCollection();
 
  };
 
@@ -43,10 +76,12 @@ actionAddEvent.addEventListener('click', function() {
     var eventName   = eventNameInput.value;
     var eventPrice  = eventPriceInput.value;
     var eventDate   = eventDateInput.value;
+    var eventAge    = eventAgeInput.value;
     var eventObject = createEvent({
         name  : eventName,
         price : eventPrice,
-        date  : eventDate
+        date  : eventDate,
+        age   : eventAge
     });
 
 
@@ -57,17 +92,16 @@ actionAddEvent.addEventListener('click', function() {
     eventNameInput.value  = "";
     eventPriceInput.value = "";
     eventDateInput.value  = "";
+    eventAgeInput.value  = "";
 
-    renderEventCollection();
+    renderEventList();
 });
 
-eventListComponent.addEventListener('çlick', function(e){
-    console.log(e.target.getAttribute('data-position')); //
+eventListLayout.addEventListener('çlick', function(e){
 
-console.log(e.target);
 });
 
-renderEventCollection();
+renderEventList();
 
 
 

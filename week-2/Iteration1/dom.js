@@ -16,7 +16,14 @@ const eventCollection =  EventManager.getEventCollection();
 
 
 var template        = [ `<table>
-                       <tbody>`];
+                       <tbody>
+                       <thead>
+                       <tr>
+   
+                       <td>  Event Name  </td>
+                       <td>  Event Price  </td>
+                       <td> Event Date </td>
+                       <td> Event Restriction </td> </thead>`];
 for(var i = 0; i < eventCollection.length; i++) {
 
     var eventName  = eventCollection[i].name    || '[No name]'
@@ -25,6 +32,7 @@ for(var i = 0; i < eventCollection.length; i++) {
     var eventDate  = eventCollection[i].date    || '[No date yet]';
 
    template.push( `<tr>
+   
                         <td>  
                         ${eventName} 
                         </td>
@@ -46,20 +54,50 @@ for(var i = 0; i < eventCollection.length; i++) {
                   </tr>`);
 
 }
-template.push(`</tbody>
+template.push(`
+            </tbody>
             </table>`);
 eventListLayout.innerHTML = template.join('');
 
-var eventItemDomCollection = document.getElementsByClassName("event-item-edit--action")
-var eventItemDomCollection = document.getElementsByClassName("event-item-delete--action")
+var eventItemDomEditCollection = document.getElementsByClassName("event-item-edit--action")
+var eventItemDomDeleteCollection = document.getElementsByClassName("event-item-delete--action")
 
-
-
-for(var i = 0; i < eventItemDomCollection.length; i++){
-    eventItemDomCollection[i].addEventListener('click', (e)=>{
+for(var i = 0; i < eventItemDomDeleteCollection.length; i++){
+    eventItemDomDeleteCollection[i].addEventListener('click', (e)=>{
 
      var eventIndex = e.target.getAttribute('item-position');
-     console.log(EventManager.getEvent(eventIndex)) ;
+     
+     eventCollection.splice(eventIndex, 1);
+     renderEventList();
+
+    });
+}
+
+for(var i = 0; i < eventItemDomEditCollection.length; i++){
+    eventItemDomEditCollection[i].addEventListener('click', (e)=>{
+
+     var eventIndex = e.target.getAttribute('item-position');
+    
+    
+    
+     console.log('name: ',eventCollection);
+     eventNameInput.value  = eventCollection[eventIndex].name;
+     eventPriceInput.value =  eventCollection[eventIndex].price;
+     eventDateInput.value  =  eventCollection[eventIndex].date;
+     eventAgeInput.value   =  eventCollection[eventIndex].age;
+
+      eventName  = eventNameInput.value;
+      eventAge   = eventPriceInput.value     || '[Child friendly]';
+      eventPrice = eventDateInput.value   || '[free]';
+      eventDate  = eventAgeInput.value    || '[No date yet]';
+
+
+
+     eventCollection.splice(eventIndex, 1);
+
+
+    renderEventList();
+
     });
 }
    
@@ -88,6 +126,9 @@ actionAddEvent.addEventListener('click', function() {
     //Create new event
     EventManager.addEvent(eventObject);
 
+    
+   
+
     //Nulify the dom components
     eventNameInput.value  = "";
     eventPriceInput.value = "";
@@ -95,6 +136,7 @@ actionAddEvent.addEventListener('click', function() {
     eventAgeInput.value  = "";
 
     renderEventList();
+    
 });
 
 eventListLayout.addEventListener('çlick', function(e){

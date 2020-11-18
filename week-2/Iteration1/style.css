@@ -1,5 +1,47 @@
-table, th, td {
+/* table, th, td {
     border: 1px solid black;
     width: 35%;
+  } */
+  table 
+  {
+      width: 50%;
+  }
+  table, th, td 
+  {
+      border: solid 1px #DDD;
+      border-collapse: collapse;
+      padding: 2px 3px;
+      text-align: center;
+      background-color: #ddd;
+      
+
+  }
+  thead
+  {
+      border: solid 1px rgb(25, 24, 24);
+      border-collapse: collapse;
+      padding: 2px 3px;
+      text-align: center;
+      background-color: rgb(172, 137, 137);
+      font-weight: bold;
+      
+
+  }
+
+  input[type='button'] 
+  {
+      cursor: pointer;
+      border: none;
+      color: #FFF;
+      width: 100%;
+      cursor: pointer;
+      text-decoration: underline;
   }
   
+  input[type='text'], select 
+  {
+      text-align: center;
+      border: solid 1px #CCC;
+      width: auto;
+      padding: 2px 3px;
+  }

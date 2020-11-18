@@ -15,6 +15,9 @@ var EventManager = {
     getEvent(eventIndex) {
         return EventManager.eventCollection[eventIndex];
     }
+
+   
+    
 };
 
 

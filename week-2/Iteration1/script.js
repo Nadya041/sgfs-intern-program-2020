@@ -16,8 +16,6 @@ var EventManager = {
         return EventManager.eventCollection[eventIndex];
     }
 
-   
-    
 };
 
 
@@ -44,6 +42,40 @@ const createEvent = function (eventObject) {
 
     };
 };
+
+
+
+var clientCollection = [];
+
+var ClientManager = {
+
+    clientCollection : [],
+   
+
+    addClientToEvent(clientObject){
+        return ClientManager.clientCollection[i].push[eventIndex];
+        
+    },
+
+    createClient(clientObject){
+        return ClientManager.clientCollection[i].push[eventIndex];
+        
+    }
+
+};
+
+
+const createClient = function (clientObject){
+   
+    return{
+    name            : clientObject.firstName,
+    price           : clientObject.lastName,
+    age             : clientObject.age,
+    
+};
+};
+
+
 
 var newEvent = createEvent({
     name : "Galena Secrets" ,

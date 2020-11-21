@@ -1,25 +1,21 @@
-const actionAddEvent   = document.getElementById("action--add-event");
-const eventNameInput   = document.getElementById("event-name");
-const eventPriceInput  = document.getElementById("event-price");
-const eventDateInput   = document.getElementById("event-date");
-const eventAgeInput    = document.getElementById("event-age");
-const eventListLayout  = document.getElementById("event-list--layout");
-const clientListLayout = document.getElementById("event-list--layout");
-const actionAddClient  = document.getElementById("")
+const actionAddEvent  = document.getElementById("action--add-event");
+const eventNameInput  = document.getElementById("event-name");
+const eventPriceInput = document.getElementById("event-price");
+const eventDateInput  = document.getElementById("event-date");
+const eventAgeInput   = document.getElementById("event-age");
+const eventListLayout = document.getElementById("event-list--layout");
 
-const renderEventList = () =>{
-    
+const clientListLayout     = document.getElementById("event-list--layout");
+const actionAddClient      = document.getElementById("action--add-client");
+const clientFirstNameInput = document.getElementById("client-first-name" );
+const clientLastNameInput  = document.getElementById("client-last-name" );
+const clientAgeInput       = document.getElementById("client-age" );
 
- const eventCollection =  EventManager.getEventCollection();
+const renderEventList = () => {
 
+    const eventCollection = EventManager.getEventCollection();
 
-
-    // if(eventListLayout.length == 0 ){
-    //     return '<div> No party </div>';
-    // }
-
-
-var template        = [ `<table>
+    var template = [`<table>
                        <tbody>
                        <thead>
                        <tr>
@@ -28,14 +24,14 @@ var template        = [ `<table>
                        <td>  Event Price  </td>
                        <td> Event Date </td>
                        <td> Event Restriction </td> </thead>`];
-for(var i = 0; i < eventCollection.length; i++) {
+    for (var i = 0; i < eventCollection.length; i++) {
 
-    var eventName  = eventCollection[i].name    || '[No name]'
-    var eventAge   = eventCollection[i].age     || '[Child friendly]';
-    var eventPrice = eventCollection[i].price   || '[free]';
-    var eventDate  = eventCollection[i].date    || '[No date yet]';
+        var eventName  = eventCollection[i].name  || '[No name]'
+        var eventAge   = eventCollection[i].age   || '[Child friendly]';
+        var eventPrice = eventCollection[i].price || '[free]';
+        var eventDate  = eventCollection[i].date  || '[No date yet]';
 
-   template.push( `<tr>
+        template.push(`<tr>
    
                         <td>  
                         ${eventName} 
@@ -60,64 +56,59 @@ for(var i = 0; i < eventCollection.length; i++) {
                         </td>
                   </tr>`);
 
-}
- template.push(`</tbody>
+    }
+    template.push(`</tbody>
             </table>`);
-eventListLayout.innerHTML = template.join('');
+    eventListLayout.innerHTML = template.join('');
 
 
-var eventItemDomEditCollection   = document.getElementsByClassName("event-item-edit--action")
-var eventItemDomDeleteCollection = document.getElementsByClassName("event-item-delete--action")
+    var eventItemDomEditCollection   = document.getElementsByClassName("event-item-edit--action")
+    var eventItemDomDeleteCollection = document.getElementsByClassName("event-item-delete--action")
 
 
-for(var i = 0; i < eventItemDomDeleteCollection.length; i++){
-    eventItemDomDeleteCollection[i].addEventListener('click', (e)=>{
+    for (var i = 0; i < eventItemDomDeleteCollection.length; i++) {
+        eventItemDomDeleteCollection[i].addEventListener('click', (e) => {
 
-     var eventIndex = e.target.getAttribute('item-position');
-     
-     eventCollection.splice(eventIndex, 1);
-     renderEventList();
+            var eventIndex = e.target.getAttribute('item-position');
 
-    });
-}
+            eventCollection.splice(eventIndex, 1);
+            renderEventList();
 
-for(var i = 0; i < eventItemDomEditCollection.length; i++){
-    eventItemDomEditCollection[i].addEventListener('click', (e)=>{
+        });
+    }
 
-     var eventIndex = e.target.getAttribute('item-position');
-    
-    
-    
-     console.log('name: ',eventCollection);
-     eventNameInput.value  =  eventCollection[eventIndex].name;
-     eventPriceInput.value =  eventCollection[eventIndex].price;
-     eventDateInput.value  =  eventCollection[eventIndex].date;
-     eventAgeInput.value   =  eventCollection[eventIndex].age;
+    for (var i = 0; i < eventItemDomEditCollection.length; i++) {
+        eventItemDomEditCollection[i].addEventListener('click', (e) => {
 
-      eventName  = eventNameInput.value   || '[No Name]';
-      eventAge   = eventPriceInput.value  || '[Child friendly]';
-      eventPrice = eventDateInput.value   || '[free]';
-      eventDate  = eventAgeInput.value    || '[No date yet]';
+            var eventIndex = e.target.getAttribute('item-position');
 
+            console.log('name: ', eventCollection);
+            eventNameInput.value   = eventCollection[eventIndex].name;
+            eventPriceInput.value  = eventCollection[eventIndex].price;
+            eventDateInput.value   = eventCollection[eventIndex].date;
+            eventAgeInput.value    = eventCollection[eventIndex].age;
 
+            eventName  = eventNameInput.value  || '[No Name]';
+            eventAge   = eventPriceInput.value || '[Child friendly]';
+            eventPrice = eventDateInput.value  || '[free]';
+            eventDate  = eventAgeInput.value   || '[No date yet]';
 
-     eventCollection.splice(eventIndex, 1);
+            eventCollection.splice(eventIndex, 1);
 
+            renderEventList();
 
-    renderEventList();
+        });
+    }
 
-    });
-}
-   
 };
 
-var renderEventCollection = function(){
+var renderEventCollection = function () {
 
     eventListLayout.innerHTML = getDomEventCollection();
 
- };
+};
 
- actionAddEvent.addEventListener('click', function() {
+actionAddEvent.addEventListener('click', function () {
 
     var eventName   = eventNameInput.value;
     var eventPrice  = eventPriceInput.value;
@@ -130,17 +121,8 @@ var renderEventCollection = function(){
         age   : eventAge
     });
 
-    
-
     //Create new event
     EventManager.addEvent(eventObject);
-
-
-
-    // EventManager.addClient(client);
-
-    
-   
 
     //Nulify the dom components
     eventNameInput.value  = "";
@@ -149,19 +131,18 @@ var renderEventCollection = function(){
     eventAgeInput.value   = "";
 
     renderEventList();
-    
-});
-
-eventListLayout.addEventListener('çlick', function(e){
 
 });
 
+eventListLayout.addEventListener('çlick', function (e) {
 
-const renderClientList = () =>{
+});
 
-const clientCollection =  clientManager.getClientCollection();
+const renderClientList = () => {
 
-var templateClients        = [ `<table>
+    const clientCollection = clientManager.getClientCollection();
+
+    var templateClients = [`<table>
                        <tbody>
                        <thead>
                        <tr>
@@ -169,19 +150,16 @@ var templateClients        = [ `<table>
                        <td>  First Name  </td>
                        <td>  Last Name  </td>
                        <td> Age  </td> </thead>`];
-for(var i = 0; i < clientCollection.length; i++) {
+    for (var i = 0; i < clientCollection.length; i++) {
 
-    var clientFirstName   = clientCollection[i].firstName     || '[First Name]'
-    var clientLasttName   = clientCollection[i].lastName     || '[Last Name]';
-    var clientAge         = clientCollection[i].age          || '[age]';
-   
-   templateClients.push( `<tr>
+        var clientFirstName = clientCollection[i].firstName || '[First Name]'
+        var clientLasttName = clientCollection[i].lastName  || '[Last Name]';
+        var clientAge       = clientCollection[i].age       || '[age]';
+
+        templateClients.push(`<tr>
    
                         <td>  
                         ${clientFirstName} 
-                        </td>
-                        <td> 
-                        ${eventPrice} лв 
                         </td>
                         <td>  
                         ${clientLasttName} 
@@ -195,120 +173,118 @@ for(var i = 0; i < clientCollection.length; i++) {
                         <td>  
                         <button action = "delete" item-position="${i}" class="client-item-delete--action" >Delete</button>
                         </td>
-                        <td>  
-                        <button action = "add-clients" item-position="${i}" class="client-itenm-add--action" >Add clients</button>   
-                        </td>
                   </tr>`);
 
-}
-templateClients.push(`</tbody>
+    }
+    templateClients.push(`</tbody>
             </table>`);
-ClientListLayout.innerHTML = templateClients.join('');
+    ClientListLayout.innerHTML = templateClients.join('');
 
-var clientItemDomEditCollection   = document.getElementsByClassName("client-item-edit--action")
-var clientItemDomDeleteCollection = document.getElementsByClassName("client-item-delete--action")
-var clientItemAddDomShowClients   = document.getElementsByClassName("client-itenm-add--action")
-var eventItemDomShowClients       = document.getElementsByClassName("event-show-clients--action")
+    var clientItemDomEditCollection   = document.getElementsByClassName("client-item-edit--action")
+    var clientItemDomDeleteCollection = document.getElementsByClassName("client-item-delete--action")
+    var clientItemAddDomClients       = document.getElementsByClassName("action--add-client")
+    var eventItemDomShowClients       = document.getElementsByClassName("event-show-clients--action")
 
 
-for(var i = 0; i <eventItemDomShowClients.length; i++){
-    eventItemDomShowClients[i].addEventListener('click', (e)=>{
+    for (var i = 0; i < clientItemAddDomClients.length; i++) {
+        clientItemAddDomClients[i].addEventListener('click', (e) => {
 
-     var eventIndex = e.target.getAttribute('item-position');
-     
-     clientCollection.show(eventIndex);
-     renderEventList();
+            var clientIndex = e.target.getAttribute('item-position');
+
+            clientCollection.push(clientIndex);
+            renderClientList();
+
+        });
+    }
+
+    for (var i = 0; i < eventItemDomShowClients.length; i++) {
+        eventItemDomShowClients[i].addEventListener('click', (e) => {
+
+            var clientIndex = e.target.getAttribute('item-position');
+
+            clientCollection.show(clientIndex);
+            renderClientList();
+
+        });
+    }
+
+
+    for (var i = 0; i < clientItemDomDeleteCollection; i++) {
+        clientItemDomDeleteCollection[i].addEventListener('click', (e) => {
+
+            var clientIndex = e.target.getAttribute('item-position');
+
+            clientCollection.splice(clientIndex, 1);
+            renderClientList();
+
+        });
+    }
+
+    for (var i = 0; i < clientItemDomEditCollection.length; i++) {
+        clientItemDomEditCollection[i].addEventListener('click', (e) => {
+
+            var clientIndex = e.target.getAttribute('item-position');
+
+
+            console.log('name: ', clientCollection);
+            clientFirstNameInput.value = clientCollection[clientIndex].firstName;
+            clientLastNameInput.value  = clientCollection[clientIndex].lastName;
+            clientAgeInput.value       = clientCollection[clientIndex].age;
+
+
+            clientFirstName = clientFirstNameInput.value || '[First Name]';
+            clientLastName  = clientLastNameInput.value  || '[Last Name]';
+            clientAge       = clientAgeInput.value       || '[age]';
+
+            clientCollection.splice(clientIndex, 1);
+
+            renderClientList();
+
+        });
+    }
+
+};
+
+var renderClientCollection = function () {
+
+    clientListLayout.innerHTML = getDomClientCollection();
+
+};
+
+actionAddClient.addEventListener('click', function () {
+
+    var clientFirstName = clientFirstNameInput.value;
+    var clientLastName  = clientLastNameInput.value;
+    var clientAge       = clientAgeInput.value;
+
+    var clientObject = addClient({
+        firstName: clientFirstName,
+        lastName : clientLastName,
+        age      : clientAge
 
     });
-}
-
-for(var i = 0; i < clientItemDomDeleteCollection; i++){
-    clientItemDomDeleteCollection[i].addEventListener('click', (e)=>{
-
-     var clientIndex = e.target.getAttribute('item-position');
-     
-    clientCollection.splice(clientIndex, 1);
-     renderEventList();
-
-    });
-}
-
-for(var i = 0; i < clientItemDomEditCollection.length; i++){
-    clientItemDomEditCollection[i].addEventListener('click', (e)=>{
-
-     var clientIndex = e.target.getAttribute('item-position');
-    
-
-     console.log('name: ',clientCollection);
-     clientFirstNameInput.value  =  clientCollection[clientIndex].firstName;
-     clientLastNameInput.value =  clientCollection[clientIndex].lastName;
-     clientAgeInput.value  =  clientCollection[clientIndex].age;
-    
-
-      clientFirstName  = clientFirstNameInput.value   || '[First Name]';
-     clientLastName   = clientLastNameInput.value  || '[Last Name]';
-      clientAge = clientAgeInput.value   || '[age]';
-      
 
 
-      clientCollection.splice(clientIndex, 1);
-
-
-      renderClientList();
-  
-      });
-  }
-     
-  };
-  
-  var renderClientCollection = function(){
-  
-      clientListLayout.innerHTML = getDomCkientCollection();
-  
-   };
-  
-    actionAddClient.addEventListener('click', function() {
-
-    var clientFirstName   = clientFirstNameInput.value;
-    var clientLastName    = clientLastNameInput.value;
-    var clientAge         = clientAgeInput.value;
-  
-    var clientObject = createClient({
-        firstName : clientFirstName,
-        lastName  : clientLastName,
-        age       : clientAge
-       
-    });
-
-
-    ClientManager.addClient(clentObject);
-    
-
+    ClientManager.addClient(clientObject);
 
     //Nulify the dom components
-   
+
     clientFirstNameInput.value = "";
     clientLastNameInput.value  = "";
-    eventAgeInput.value   = "";
+    eventAgeInput.value        = "";
 
     renderClientList();
 
-    
 });
 
 
-var renderClientCollection = function(){
+var renderClientCollection = function () {
 
-    eventListLayout.innerHTML = getDomClientCollection();
+    clientListLayout.innerHTML = getDomClientCollection();
 
- };
+};
 
-
-
-
-
-
-renderClisentList();
+renderClientList();
 
 
 

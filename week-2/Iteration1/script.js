@@ -22,17 +22,6 @@ var EventManager = {
 
 const createEvent = function (eventObject) {
 
-    if(eventObject.age > 18){
-        return{
-            name            : eventObject.name,
-            price           : eventObject.price,
-            date            : eventObject.date,
-            age             : true
-    
-            
-        };
-    }
-
     return{
         name            : eventObject.name,
         price           : eventObject.price,
@@ -74,12 +63,3 @@ const createClient = function (clientObject){
     
 };
 };
-
-
-
-var newEvent = createEvent({
-    name : "Galena Secrets" ,
-    price : 20
-})
-
-eventCollection.push(newEvent);

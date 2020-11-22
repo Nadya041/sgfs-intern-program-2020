@@ -9,48 +9,54 @@
 </head>
 
 <body>
+    <div class="container">
+        <div id="event-list--container">
+            <div>
+                <h2>Add new event:</h2>
+            </div>
+            <div>Name</div>
+            <input id="event-name" type="text" placeholder="Enter event name" value="">
 
-    <div>
-        <h2>Add new event:</h2>
+            <div>Price</div>
+            <input id="event-price" type="text" placeholder="Enter event price">
+
+            <div>Date</div>
+            <input id="event-date" type="text" placeholder="Enter event date">
+
+            <div>Age restriction?</div>
+            <input id="event-age" type="text" placeholder="Enter age restriction">
+            <div>
+                <button id="action--add-event">Add event </button>
+            </div>
+
+
+
+            <div id="client-form">
+                <h2>List of events: </h2>
+            </div>
+            <div id="event-list--layout"></div>
+        </div>
+
+        <div id="client-list--container">
+            <h2>Add new client:</h2>
+
+            <div>First Name</div>
+            <input id="client-first-name" type="text" placeholder="Enter your first name" value="">
+
+            <div>Last Name</div>
+            <input id="client-last-name" type="text" placeholder="Enter your last name">
+
+            <div>Age</div>
+            <input id="client-age" type="text" placeholder="Enter your age">
+
+            <div><button id="action--add-client">Add client </button></div>
+
+            <div>
+                <h2 class ="client-list--header">List of clients: </h2>
+            </div>
+            <div id="client-list--layout"></div>
+        </div>
     </div>
-    <div>Name</div>
-    <input id="event-name" type="text" placeholder="Enter event name" value="">
-
-    <div>Price</div>
-    <input id="event-price" type="text" placeholder="Enter event price">
-
-    <div>Date</div>
-    <input id="event-date" type="text" placeholder="Enter event date">
-
-    <div>Age restriction?</div>
-    <input id="event-age" type="text" placeholder="Enter age restriction">
-    <br>
-    <button id="action--add-event">Add event </button>
-
-
-    <div>
-        <h2>List of events: </h2>
-    </div>
-    <div id="event-list--layout"></div>
-
-    <div>
-        <h2>Add new client:</h2>
-    </div>
-    <div>First Name</div>
-    <input id="client-first-name" type="text" placeholder="Enter your first name" value="">
-
-    <div>Last Name</div>
-    <input id="client-last-name" type="text" placeholder="Enter your last name">
-
-    <div>Age</div>
-    <input id="client-age" type="text" placeholder="Enter your age">
-    <br>
-    <button id="action--add-client">Add client </button>
-
-    <div>
-        <h2>List of clients: </h2>
-    </div>
-    <div id="clients-list--layout"></div>
 
     <script src="script.js"></script>
     <script src="dom.js"></script>

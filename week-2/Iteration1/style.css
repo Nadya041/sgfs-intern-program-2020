@@ -2,10 +2,7 @@
     border: 1px solid black;
     width: 35%;
   } */
-  table 
-  {
-      width: 50%;
-  }
+  
   table, th, td 
   {
       border: solid 1px #DDD;
@@ -13,7 +10,7 @@
       padding: 2px 3px;
       text-align: center;
       background-color: #ddd;
-      display: block;
+     
       
 
   }
@@ -45,4 +42,27 @@
       border: solid 1px #CCC;
       width: auto;
       padding: 2px 3px;
+  }
+  #event-list--container
+  {
+      display: inline-block;
+      width:100%;
+  }
+
+  #client-list--container
+  
+  {
+    display: none;
+    width:100%;
+
+  }
+
+  .container{
+      display:flex;
+      flex-direction: row;
+      justify-content: space-between;
+  }
+
+  .client-list--header{
+      margin-top:55px;
   }

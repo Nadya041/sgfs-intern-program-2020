@@ -5,15 +5,18 @@ const eventDateInput  = document.getElementById("event-date");
 const eventAgeInput   = document.getElementById("event-age");
 const eventListLayout = document.getElementById("event-list--layout");
 
-const clientListLayout     = document.getElementById("event-list--layout");
+const clientListLayout     = document.getElementById("client-list--layout");
 const actionAddClient      = document.getElementById("action--add-client");
 const clientFirstNameInput = document.getElementById("client-first-name" );
 const clientLastNameInput  = document.getElementById("client-last-name" );
 const clientAgeInput       = document.getElementById("client-age" );
+const clientListContainer  = document.getElementById("client-list--container");
 
 const renderEventList = () => {
 
     const eventCollection = EventManager.getEventCollection();
+
+
 
     var template = [`<table>
                        <tbody>
@@ -64,8 +67,9 @@ const renderEventList = () => {
 
     var eventItemDomEditCollection   = document.getElementsByClassName("event-item-edit--action")
     var eventItemDomDeleteCollection = document.getElementsByClassName("event-item-delete--action")
+    var eventItemDomShowClients      = document.getElementsByClassName("event-show-clients--action")
 
-
+   
     for (var i = 0; i < eventItemDomDeleteCollection.length; i++) {
         eventItemDomDeleteCollection[i].addEventListener('click', (e) => {
 
@@ -95,7 +99,23 @@ const renderEventList = () => {
 
             eventCollection.splice(eventIndex, 1);
 
+
+
             renderEventList();
+
+
+
+        });
+    }
+
+    for (var i = 0; i < eventItemDomShowClients.length; i++) {
+        eventItemDomShowClients[i].addEventListener('click', (e) => {
+
+            var clientIndex = e.target.getAttribute('item-position');
+            EventManager.setCurrentSelectedEvent(clientIndex)
+         
+            clientListContainer.style.display = "inline-block";
+            renderClientList();
 
         });
     }
@@ -139,9 +159,12 @@ eventListLayout.addEventListener('çlick', function (e) {
 });
 
 const renderClientList = () => {
-
-    const clientCollection = clientManager.getClientCollection();
-
+const currentSelectedEventId  = EventManager.getCurrentSelectedEventId();
+if (!currentSelectedEventId) {
+    return;
+}
+const clientList = EventManager.getEvent(currentSelectedEventId).clientCollection;
+   
     var templateClients = [`<table>
                        <tbody>
                        <thead>
@@ -150,11 +173,11 @@ const renderClientList = () => {
                        <td>  First Name  </td>
                        <td>  Last Name  </td>
                        <td> Age  </td> </thead>`];
-    for (var i = 0; i < clientCollection.length; i++) {
+    for (var i = 0; i < clientList.length; i++) {
 
-        var clientFirstName = clientCollection[i].firstName || '[First Name]'
-        var clientLasttName = clientCollection[i].lastName  || '[Last Name]';
-        var clientAge       = clientCollection[i].age       || '[age]';
+        var clientFirstName = clientList[i].firstName || '[First Name]'
+        var clientLastName  = clientList[i].lastName  || '[Last Name]';
+        var clientAge       = clientList[i].age       || '[age]';
 
         templateClients.push(`<tr>
    
@@ -162,7 +185,7 @@ const renderClientList = () => {
                         ${clientFirstName} 
                         </td>
                         <td>  
-                        ${clientLasttName} 
+                        ${clientLastName} 
                         </td>
                         <td>  
                         ${clientAge}
@@ -178,76 +201,46 @@ const renderClientList = () => {
     }
     templateClients.push(`</tbody>
             </table>`);
-    ClientListLayout.innerHTML = templateClients.join('');
+    clientListLayout.innerHTML = templateClients.join('');
 
     var clientItemDomEditCollection   = document.getElementsByClassName("client-item-edit--action")
     var clientItemDomDeleteCollection = document.getElementsByClassName("client-item-delete--action")
-    var clientItemAddDomClients       = document.getElementsByClassName("action--add-client")
-    var eventItemDomShowClients       = document.getElementsByClassName("event-show-clients--action")
-
-
-    for (var i = 0; i < clientItemAddDomClients.length; i++) {
-        clientItemAddDomClients[i].addEventListener('click', (e) => {
-
-            var clientIndex = e.target.getAttribute('item-position');
-
-            clientCollection.push(clientIndex);
-            renderClientList();
-
-        });
-    }
-
-    for (var i = 0; i < eventItemDomShowClients.length; i++) {
-        eventItemDomShowClients[i].addEventListener('click', (e) => {
-
-            var clientIndex = e.target.getAttribute('item-position');
-
-            clientCollection.show(clientIndex);
-            renderClientList();
-
-        });
-    }
-
-
-    for (var i = 0; i < clientItemDomDeleteCollection; i++) {
+    
+    for (var i = 0; i < clientItemDomDeleteCollection.length; i+=1) {
         clientItemDomDeleteCollection[i].addEventListener('click', (e) => {
 
             var clientIndex = e.target.getAttribute('item-position');
-
-            clientCollection.splice(clientIndex, 1);
+            const currentSelectedEventId  = EventManager.getCurrentSelectedEventId();
+            
+            const clientList = EventManager.getEvent(currentSelectedEventId).clientCollection;
+            clientList.splice(clientIndex, 1);
             renderClientList();
 
         });
     }
 
-    for (var i = 0; i < clientItemDomEditCollection.length; i++) {
+    for (var i = 0; i < clientItemDomEditCollection.length; i+=1) {
         clientItemDomEditCollection[i].addEventListener('click', (e) => {
 
             var clientIndex = e.target.getAttribute('item-position');
-
-
-            console.log('name: ', clientCollection);
-            clientFirstNameInput.value = clientCollection[clientIndex].firstName;
-            clientLastNameInput.value  = clientCollection[clientIndex].lastName;
-            clientAgeInput.value       = clientCollection[clientIndex].age;
+            const currentSelectedEventId  = EventManager.getCurrentSelectedEventId();
+            const clientList = EventManager.getEvent(currentSelectedEventId).clientCollection;
+           
+            clientFirstNameInput.value = clientList[clientIndex].firstName;
+            clientLastNameInput.value  = clientList[clientIndex].lastName;
+            clientAgeInput.value       = clientList[clientIndex].age;
 
 
             clientFirstName = clientFirstNameInput.value || '[First Name]';
             clientLastName  = clientLastNameInput.value  || '[Last Name]';
             clientAge       = clientAgeInput.value       || '[age]';
 
-            clientCollection.splice(clientIndex, 1);
+            clientList.splice(clientIndex, 1);
 
             renderClientList();
 
         });
     }
-
-};
-
-var renderClientCollection = function () {
-
-    clientListLayout.innerHTML = getDomClientCollection();
 
 };
 
@@ -256,33 +249,27 @@ actionAddClient.addEventListener('click', function () {
     var clientFirstName = clientFirstNameInput.value;
     var clientLastName  = clientLastNameInput.value;
     var clientAge       = clientAgeInput.value;
-
-    var clientObject = addClient({
+    var clientObject = createClient({
         firstName: clientFirstName,
         lastName : clientLastName,
         age      : clientAge
 
     });
 
-
-    ClientManager.addClient(clientObject);
+    EventManager.addClient(clientObject);
+    
+   
 
     //Nulify the dom components
 
     clientFirstNameInput.value = "";
     clientLastNameInput.value  = "";
-    eventAgeInput.value        = "";
+    clientAgeInput.value       = "";
 
     renderClientList();
 
 });
 
-
-var renderClientCollection = function () {
-
-    clientListLayout.innerHTML = getDomClientCollection();
-
-};
 
 renderClientList();
 

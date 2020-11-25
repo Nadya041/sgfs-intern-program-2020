@@ -1,16 +1,17 @@
-const actionAddEvent  = document.getElementById("action--add-event");
-const eventNameInput  = document.getElementById("event-name");
+const actionAddEvent = document.getElementById("action--add-event");
+const eventNameInput = document.getElementById("event-name");
 const eventPriceInput = document.getElementById("event-price");
-const eventDateInput  = document.getElementById("event-date");
-const eventAgeInput   = document.getElementById("event-age");
+const eventDateInput = document.getElementById("event-date");
+const eventAgeInput = document.getElementById("event-age");
 const eventListLayout = document.getElementById("event-list--layout");
 
-const clientListLayout     = document.getElementById("client-list--layout");
-const actionAddClient      = document.getElementById("action--add-client");
-const clientFirstNameInput = document.getElementById("client-first-name" );
-const clientLastNameInput  = document.getElementById("client-last-name" );
-const clientAgeInput       = document.getElementById("client-age" );
-const clientListContainer  = document.getElementById("client-list--container");
+const clientListLayout = document.getElementById("client-list--layout");
+const actionAddClient = document.getElementById("action--add-client");
+const clientFirstNameInput = document.getElementById("client-first-name");
+const clientLastNameInput = document.getElementById("client-last-name");
+const clientAgeInput = document.getElementById("client-age");
+const clientIdTagInput = document.getElementById("client-idTag");
+const clientListContainer = document.getElementById("client-list--container");
 
 const renderEventList = () => {
 
@@ -18,9 +19,10 @@ const renderEventList = () => {
 
 
 
-    var template = [`<table>
+    var template = [` <h2>List of events: </h2>
+                       <table>
                        <tbody>
-                       <thead>
+                       <thead> 
                        <tr>
    
                        <td>  Event Name  </td>
@@ -29,10 +31,10 @@ const renderEventList = () => {
                        <td> Event Restriction </td> </thead>`];
     for (var i = 0; i < eventCollection.length; i++) {
 
-        var eventName  = eventCollection[i].name  || '[No name]'
-        var eventAge   = eventCollection[i].age   || '[Child friendly]';
+        var eventName = eventCollection[i].name || '[No name]'
+        var eventAge = eventCollection[i].age || '[Child friendly]';
         var eventPrice = eventCollection[i].price || '[free]';
-        var eventDate  = eventCollection[i].date  || '[No date yet]';
+        var eventDate = eventCollection[i].date || '[No date yet]';
 
         template.push(`<tr>
    
@@ -65,11 +67,11 @@ const renderEventList = () => {
     eventListLayout.innerHTML = template.join('');
 
 
-    var eventItemDomEditCollection   = document.getElementsByClassName("event-item-edit--action")
+    var eventItemDomEditCollection = document.getElementsByClassName("event-item-edit--action")
     var eventItemDomDeleteCollection = document.getElementsByClassName("event-item-delete--action")
-    var eventItemDomShowClients      = document.getElementsByClassName("event-show-clients--action")
+    var eventItemDomShowClients = document.getElementsByClassName("event-show-clients--action")
 
-   
+
     for (var i = 0; i < eventItemDomDeleteCollection.length; i++) {
         eventItemDomDeleteCollection[i].addEventListener('click', (e) => {
 
@@ -87,23 +89,19 @@ const renderEventList = () => {
             var eventIndex = e.target.getAttribute('item-position');
 
             console.log('name: ', eventCollection);
-            eventNameInput.value   = eventCollection[eventIndex].name;
-            eventPriceInput.value  = eventCollection[eventIndex].price;
-            eventDateInput.value   = eventCollection[eventIndex].date;
-            eventAgeInput.value    = eventCollection[eventIndex].age;
+            eventNameInput.value = eventCollection[eventIndex].name;
+            eventPriceInput.value = eventCollection[eventIndex].price;
+            eventDateInput.value = eventCollection[eventIndex].date;
+            eventAgeInput.value = eventCollection[eventIndex].age;
 
-            eventName  = eventNameInput.value  || '[No Name]';
-            eventAge   = eventPriceInput.value || '[Child friendly]';
-            eventPrice = eventDateInput.value  || '[free]';
-            eventDate  = eventAgeInput.value   || '[No date yet]';
+            eventName = eventNameInput.value || '[No Name]';
+            eventAge = eventPriceInput.value || '[Child friendly]';
+            eventPrice = eventDateInput.value || '[free]';
+            eventDate = eventAgeInput.value || '[No date yet]';
 
             eventCollection.splice(eventIndex, 1);
 
-
-
             renderEventList();
-
-
 
         });
     }
@@ -113,7 +111,7 @@ const renderEventList = () => {
 
             var clientIndex = e.target.getAttribute('item-position');
             EventManager.setCurrentSelectedEvent(clientIndex)
-         
+
             clientListContainer.style.display = "inline-block";
             renderClientList();
 
@@ -130,25 +128,25 @@ var renderEventCollection = function () {
 
 actionAddEvent.addEventListener('click', function () {
 
-    var eventName   = eventNameInput.value;
-    var eventPrice  = eventPriceInput.value;
-    var eventDate   = eventDateInput.value;
-    var eventAge    = eventAgeInput.value;
+    var eventName = eventNameInput.value;
+    var eventPrice = eventPriceInput.value;
+    var eventDate = eventDateInput.value;
+    var eventAge = eventAgeInput.value;
     var eventObject = createEvent({
-        name  : eventName,
-        price : eventPrice,
-        date  : eventDate,
-        age   : eventAge
+        name: eventName,
+        price: eventPrice,
+        date: eventDate,
+        age: eventAge
     });
 
     //Create new event
     EventManager.addEvent(eventObject);
 
     //Nulify the dom components
-    eventNameInput.value  = "";
+    eventNameInput.value = "";
     eventPriceInput.value = "";
-    eventDateInput.value  = "";
-    eventAgeInput.value   = "";
+    eventDateInput.value = "";
+    eventAgeInput.value = "";
 
     renderEventList();
 
@@ -159,12 +157,12 @@ eventListLayout.addEventListener('çlick', function (e) {
 });
 
 const renderClientList = () => {
-const currentSelectedEventId  = EventManager.getCurrentSelectedEventId();
-if (!currentSelectedEventId) {
-    return;
-}
-const clientList = EventManager.getEvent(currentSelectedEventId).clientCollection;
-   
+    const currentSelectedEventId = EventManager.getCurrentSelectedEventId();
+    if (!currentSelectedEventId) {
+        return;
+    }
+    const clientList = EventManager.getEventClients();
+
     var templateClients = [`<table>
                        <tbody>
                        <thead>
@@ -172,12 +170,14 @@ const clientList = EventManager.getEvent(currentSelectedEventId).clientCollectio
    
                        <td>  First Name  </td>
                        <td>  Last Name  </td>
-                       <td> Age  </td> </thead>`];
+                       <td> Age  </td> 
+                       <td> ID Tag </td></thead>`];
     for (var i = 0; i < clientList.length; i++) {
 
         var clientFirstName = clientList[i].firstName || '[First Name]'
-        var clientLastName  = clientList[i].lastName  || '[Last Name]';
-        var clientAge       = clientList[i].age       || '[age]';
+        var clientLastName = clientList[i].lastName || '[Last Name]';
+        var clientAge = clientList[i].age || '[age]';
+        var clientIdTag = clientList[i].idTag
 
         templateClients.push(`<tr>
    
@@ -189,6 +189,9 @@ const clientList = EventManager.getEvent(currentSelectedEventId).clientCollectio
                         </td>
                         <td>  
                         ${clientAge}
+                        </td>
+                        <td>
+                        ${clientIdTag}
                         </td>
                         <td>  
                         <button action = "edit" item-position="${i}" class="client-item-edit--action" >Edit</button>   
@@ -203,40 +206,36 @@ const clientList = EventManager.getEvent(currentSelectedEventId).clientCollectio
             </table>`);
     clientListLayout.innerHTML = templateClients.join('');
 
-    var clientItemDomEditCollection   = document.getElementsByClassName("client-item-edit--action")
+    var clientItemDomEditCollection = document.getElementsByClassName("client-item-edit--action")
     var clientItemDomDeleteCollection = document.getElementsByClassName("client-item-delete--action")
-    
-    for (var i = 0; i < clientItemDomDeleteCollection.length; i+=1) {
+
+
+
+    for (var i = 0; i < clientItemDomDeleteCollection.length; i += 1) {
         clientItemDomDeleteCollection[i].addEventListener('click', (e) => {
 
             var clientIndex = e.target.getAttribute('item-position');
-            const currentSelectedEventId  = EventManager.getCurrentSelectedEventId();
-            
-            const clientList = EventManager.getEvent(currentSelectedEventId).clientCollection;
-            clientList.splice(clientIndex, 1);
+            const currentSelectedEventId = EventManager.getCurrentSelectedEventId();
+
+            const eventClientIdTags = EventManager.getEvent(currentSelectedEventId).clientIdTags;
+            eventClientIdTags.splice(clientIndex, 1);
             renderClientList();
 
         });
     }
 
-    for (var i = 0; i < clientItemDomEditCollection.length; i+=1) {
+    for (var i = 0; i < clientItemDomEditCollection.length; i += 1) {
         clientItemDomEditCollection[i].addEventListener('click', (e) => {
 
             var clientIndex = e.target.getAttribute('item-position');
-            const currentSelectedEventId  = EventManager.getCurrentSelectedEventId();
-            const clientList = EventManager.getEvent(currentSelectedEventId).clientCollection;
-           
+            const clientList = EventManager.getEventClients();
+
             clientFirstNameInput.value = clientList[clientIndex].firstName;
-            clientLastNameInput.value  = clientList[clientIndex].lastName;
-            clientAgeInput.value       = clientList[clientIndex].age;
+            clientLastNameInput.value = clientList[clientIndex].lastName;
+            clientAgeInput.value = clientList[clientIndex].age;
+            clientIdTagInput.value = clientList[clientIndex].idTag
 
-
-            clientFirstName = clientFirstNameInput.value || '[First Name]';
-            clientLastName  = clientLastNameInput.value  || '[Last Name]';
-            clientAge       = clientAgeInput.value       || '[age]';
-
-            clientList.splice(clientIndex, 1);
-
+            EventManager.setCurrentSelectedClientId(clientList[clientIndex].idTag);
             renderClientList();
 
         });
@@ -246,25 +245,48 @@ const clientList = EventManager.getEvent(currentSelectedEventId).clientCollectio
 
 actionAddClient.addEventListener('click', function () {
 
-    var clientFirstName = clientFirstNameInput.value;
-    var clientLastName  = clientLastNameInput.value;
-    var clientAge       = clientAgeInput.value;
-    var clientObject = createClient({
-        firstName: clientFirstName,
-        lastName : clientLastName,
-        age      : clientAge
 
-    });
 
-    EventManager.addClient(clientObject);
-    
-   
+    if (EventManager.selectedClientId) {
+
+        var newClientData = {
+            firstName: clientFirstNameInput.value || '[First Name]',
+            lastName: clientLastNameInput.value || '[Last Name]',
+            age: clientAgeInput.value || '[age]',
+            idTag: clientIdTagInput.value
+        }
+        EventManager.editClient(EventManager.selectedClientId, newClientData);
+        EventManager.setCurrentSelectedClientId(null)
+    }
+    else {
+        var clientFirstName = clientFirstNameInput.value;
+        var clientLastName = clientLastNameInput.value;
+        var clientAge = clientAgeInput.value;
+        var clientIdTag = clientIdTagInput.value;
+        var wallet = 100;
+
+
+
+        var clientObject = createClient({
+            firstName: clientFirstName,
+            lastName: clientLastName,
+            age: clientAge,
+            idTag: clientIdTag,
+            wallet: wallet
+
+
+        });
+
+        EventManager.addClient(clientObject);
+
+    }
 
     //Nulify the dom components
 
     clientFirstNameInput.value = "";
-    clientLastNameInput.value  = "";
-    clientAgeInput.value       = "";
+    clientLastNameInput.value = "";
+    clientAgeInput.value = "";
+    clientIdTagInput.value = "";
 
     renderClientList();
 
@@ -272,6 +294,4 @@ actionAddClient.addEventListener('click', function () {
 
 
 renderClientList();
-
-
 

@@ -80,7 +80,7 @@ var EventManager = {
         }
         var oldClientData = EventManager.getClientByIdTag(clientIdTag);
         oldClientData.firstName = newClientData.firstName;
-        oldClientData.lasttName = newClientData.lastName;
+        oldClientData.lastName = newClientData.lastName;
         oldClientData.age       = newClientData.age;
 
 

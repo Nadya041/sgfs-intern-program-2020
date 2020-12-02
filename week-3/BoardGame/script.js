@@ -2,41 +2,108 @@ let myBoardElement = document.getElementById("myBoard");
 let playerInfoTurn = document.getElementById("player-info-box");
 let diceInfo = document.getElementById("dice-info");
 let throwDice = document.getElementById("throw-dice--action");
+let itemInfo = document.getElementById("item-info");
+let actionBuyItem = document.getElementById("buy-item--action");
+let actionSkipItem = document.getElementById("skip-item--action");
 
 throwDice.addEventListener("click", function () {
 
     GameEngine.processDiceThrow();
 });
 
+actionBuyItem.addEventListener('click', function () {
+    GameEngine.buyItem()
+
+});
+
+actionSkipItem.addEventListener('click', function () {
+    GameEngine.skipItem()
+
+});
+
+
 const GameEngine = {
     gameFields: [],
     availableFields: [...availableFields],
     players: [...availablePlayerCollection],
     currentPlayerIndex: 0,
+    currentFieldIndex: 0,
 
 
     showPlayerTurn() {
-        playerInfoTurn.innerHTML = ("The player on turn is: " + GameEngine.players[this.currentPlayerIndex].name)
+        playerInfoTurn.innerHTML = ("The player on turn is: " + GameEngine.players[this.currentPlayerIndex].name);
+    },
 
+    skipItem() {
+
+        actionBuyItem.style.display = "none";
+        actionSkipItem.style.display = "none";
+        this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
+        GameEngine.showPlayerTurn();
+        throwDice.style.display = "inline-block";
+    },
+
+    payTax() {
+
+        GameEngine.players[this.currentPlayerIndex].wallet -= GameEngine.availableFields[GameEngine.currentFieldIndex].tax
+        alert(GameEngine.players[this.currentPlayerIndex].name + ", you pay " + GameEngine.availableFields[GameEngine.currentFieldIndex].tax
+            + " tax to " + GameEngine.players.find(p => p.id == GameEngine.availableFields[GameEngine.currentFieldIndex].owner).name)
+        this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
+        GameEngine.showPlayerTurn();
+        throwDice.style.display = "inline-block";
+
+    },
+
+    buyItem() {
+
+        if (GameEngine.players[this.currentPlayerIndex].wallet < GameEngine.availableFields[GameEngine.currentFieldIndex].price) {
+            alert("You don'n have enought money! ")
+            return;
+        }
+
+        GameEngine.players[this.currentPlayerIndex].wallet -= GameEngine.availableFields[GameEngine.currentFieldIndex].price;
+        GameEngine.availableFields[GameEngine.currentFieldIndex].owner = GameEngine.players[this.currentPlayerIndex].id;
+
+        actionBuyItem.style.display = "none";
+        actionSkipItem.style.display = "none";
+
+        this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
+        GameEngine.showPlayerTurn();
+        throwDice.style.display = "inline-block";
+    },
+
+    showItemInfo() {
+        itemInfo.innerHTML = (GameEngine.players[this.currentPlayerIndex].name + ", you are in " + GameEngine.availableFields[this.currentFieldIndex].name);
     },
 
     processDiceThrow() {
         let currenDiceThrow = GameEngine.throwDice(6);
-        diceInfo.innerHTML = ("You throw : " + currenDiceThrow);
+        diceInfo.innerHTML = (GameEngine.players[this.currentPlayerIndex].name + ", you throw : " + currenDiceThrow);
         GameEngine.players[this.currentPlayerIndex].activeBox += currenDiceThrow;
         if (GameEngine.players[this.currentPlayerIndex].activeBox >= this.availableFields.length) {
             GameEngine.players[this.currentPlayerIndex].activeBox -= this.availableFields.length;
         }
+        throwDice.style.display = "none";
 
-       this.currentPlayerIndex = this.currentPlayerIndex == 0 ?1:0;
+        this.currentFieldIndex = GameEngine.players[this.currentPlayerIndex].activeBox
 
-        GameEngine.showPlayerTurn()
+        GameEngine.showItemInfo();
 
+        if (GameEngine.players[this.currentPlayerIndex].id != GameEngine.availableFields[GameEngine.currentFieldIndex].owner
+            && GameEngine.availableFields[GameEngine.currentFieldIndex].owner != null) {
+            GameEngine.payTax()
+        }
+        if (GameEngine.availableFields[GameEngine.currentFieldIndex].owner == null) {
+            actionBuyItem.style.display = "inline-block";
+            actionSkipItem.style.display = "inline-block";
+        }
+        if (GameEngine.players[this.currentPlayerIndex].id == GameEngine.availableFields[GameEngine.currentFieldIndex].owner) {
+            throwDice.style.display = "inline-block";
+            this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
+            GameEngine.showPlayerTurn();
+        }
         this.generateBoard();
-
     },
-
-
 
     drawBoard() {
 
@@ -46,14 +113,20 @@ const GameEngine = {
         let template = [`<div class = "box"><span> ${fieldInfo.name}</span>`]
         if (fieldInfo.id != 0) {
             template.push(`<br> <span> price: ${fieldInfo.price} </span>
-            <br> <span> tax: ${fieldInfo.tax} </span>`);
+            <br> <span> tax: ${fieldInfo.tax} </span> `);
+
         }
+
+        if (fieldInfo.owner != null) {
+            template.push(`<br> <span> owner: ${GameEngine.players.find(p => p.id == fieldInfo.owner).name} </span>`)
+        }
+
+
 
         for (let i = 0; i < GameEngine.players.length; i++) {
             if
                 (GameEngine.players[i].activeBox == fieldInfo.id) {
                 template.push(`<span> <br> ${GameEngine.players[i].name} </span>`)
-
             }
         }
 
@@ -91,10 +164,6 @@ const GameEngine = {
         this.players = [...availablePlayerCollection]
         this.generateBoard();
         this.showPlayerTurn();
-
-
-
-
     },
 
     throwDice: (sideCount) => {

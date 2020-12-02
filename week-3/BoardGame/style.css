@@ -31,3 +31,6 @@
 .row{
     display: flex;
 }
+#buy-item--action, #skip-item--action {
+    display : none;
+}

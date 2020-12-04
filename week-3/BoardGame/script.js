@@ -5,6 +5,10 @@ let throwDice = document.getElementById("throw-dice--action");
 let itemInfo = document.getElementById("item-info");
 let actionBuyItem = document.getElementById("buy-item--action");
 let actionSkipItem = document.getElementById("skip-item--action");
+let playerOneWallet = document.getElementById("player-one-wallet");
+let playerTwoWallet = document.getElementById("player-two-wallet");
+
+
 
 throwDice.addEventListener("click", function () {
 
@@ -13,6 +17,7 @@ throwDice.addEventListener("click", function () {
 
 actionBuyItem.addEventListener('click', function () {
     GameEngine.buyItem()
+    
 
 });
 
@@ -34,22 +39,41 @@ const GameEngine = {
         playerInfoTurn.innerHTML = ("The player on turn is: " + GameEngine.players[this.currentPlayerIndex].name);
     },
 
+    showPlayerOneWallet(){
+        playerOneWallet.innerHTML = ("You have " + GameEngine.players[this.currentPlayerIndex].wallet + " bgn in your wallet!" )
+    },
+
+    showPlayerTwoWallet(){
+        playerTwoWallet.innerHTML = ("You have " + GameEngine.players[this.currentPlayerIndex].wallet + " bgn in your wallet!" )
+    },
+
     skipItem() {
 
         actionBuyItem.style.display = "none";
         actionSkipItem.style.display = "none";
         this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
+        diceInfo.style.display = "none"
+        itemInfo.style.display = "none"
         GameEngine.showPlayerTurn();
         throwDice.style.display = "inline-block";
+
+
     },
 
     payTax() {
 
-        GameEngine.players[this.currentPlayerIndex].wallet -= GameEngine.availableFields[GameEngine.currentFieldIndex].tax
-        alert(GameEngine.players[this.currentPlayerIndex].name + ", you pay " + GameEngine.availableFields[GameEngine.currentFieldIndex].tax
+        const currentTax = GameEngine.availableFields[GameEngine.currentFieldIndex].tax
+
+        GameEngine.players[this.currentPlayerIndex].wallet -= currentTax
+        alert(GameEngine.players[this.currentPlayerIndex].name + ", you pay " + currentTax
             + " tax to " + GameEngine.players.find(p => p.id == GameEngine.availableFields[GameEngine.currentFieldIndex].owner).name)
+
         this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
+
         GameEngine.showPlayerTurn();
+       // GameEngine.showPlayerOneWallet();
+        // GameEngine.showPlayerTwoWallet();
+        GameEngine.players[this.currentPlayerIndex].wallet += currentTax;
         throwDice.style.display = "inline-block";
 
     },
@@ -57,7 +81,7 @@ const GameEngine = {
     buyItem() {
 
         if (GameEngine.players[this.currentPlayerIndex].wallet < GameEngine.availableFields[GameEngine.currentFieldIndex].price) {
-            alert("You don'n have enought money! ")
+            alert(GameEngine.players[this.currentPlayerIndex].name + ", you don'n have enought money! ")
             return;
         }
 
@@ -66,9 +90,13 @@ const GameEngine = {
 
         actionBuyItem.style.display = "none";
         actionSkipItem.style.display = "none";
+        diceInfo.style.display = "none"
+        itemInfo.style.display = "none"
 
         this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
         GameEngine.showPlayerTurn();
+      //  GameEngine.showPlayerOneWallet();
+      //  GameEngine.showPlayerTwoWallet();
         throwDice.style.display = "inline-block";
     },
 
@@ -101,7 +129,11 @@ const GameEngine = {
             throwDice.style.display = "inline-block";
             this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
             GameEngine.showPlayerTurn();
+           // GameEngine.showPlayerOneWallet();
+           // GameEngine.showPlayerTwoWallet();
         }
+        diceInfo.style.display = "block";
+        itemInfo.style.display = "block";
         this.generateBoard();
     },
 
@@ -164,6 +196,8 @@ const GameEngine = {
         this.players = [...availablePlayerCollection]
         this.generateBoard();
         this.showPlayerTurn();
+       // GameEngine.showPlayerOneWallet();
+       // GameEngine.showPlayerTwoWallet();
     },
 
     throwDice: (sideCount) => {

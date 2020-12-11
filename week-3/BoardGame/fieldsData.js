@@ -137,7 +137,6 @@ const availableFields = [
         tax: 40,
         owner: null
     }
-
 ];
 
 
@@ -148,7 +147,6 @@ const availablePlayerCollection = [
         activeBox   : 0,
         wallet      : 1000
     },
-
     {
         id          : 2, 
         name        : "Joro",

@@ -1,10 +1,10 @@
-let myBoardElement = document.getElementById("myBoard");
-let playerInfoTurn = document.getElementById("player-info-box");
-let diceInfo = document.getElementById("dice-info");
-let throwDice = document.getElementById("throw-dice--action");
-let itemInfo = document.getElementById("item-info");
-let actionBuyItem = document.getElementById("buy-item--action");
-let actionSkipItem = document.getElementById("skip-item--action");
+let myBoardElement  = document.getElementById("myBoard");
+let playerInfoTurn  = document.getElementById("player-info-box");
+let diceInfo        = document.getElementById("dice-info");
+let throwDice       = document.getElementById("throw-dice--action");
+let itemInfo        = document.getElementById("item-info");
+let actionBuyItem   = document.getElementById("buy-item--action");
+let actionSkipItem  = document.getElementById("skip-item--action");
 let playerOneWallet = document.getElementById("player-one-wallet");
 let playerTwoWallet = document.getElementById("player-two-wallet");
 
@@ -33,9 +33,9 @@ const GameEngine = {
 
     handleGameOver() {
         let thisPlayerWallet = GameEngine.players[this.currentPlayerIndex].wallet
-        let tax = GameEngine.availableFields[GameEngine.currentFieldIndex].tax
-        let owner = GameEngine.availableFields[GameEngine.currentFieldIndex].owner
-        let thisPlayer = GameEngine.players[this.currentPlayerIndex].id
+        let tax              = GameEngine.availableFields[GameEngine.currentFieldIndex].tax
+        let owner            = GameEngine.availableFields[GameEngine.currentFieldIndex].owner
+        let thisPlayer       = GameEngine.players[this.currentPlayerIndex].id
 
         if (thisPlayerWallet < tax && owner != thisPlayer) {
             alert(thisPlayerName + ", GAME OVER!")
@@ -61,7 +61,7 @@ const GameEngine = {
 
 
     hideButtonsBuySkip() {
-        actionBuyItem.style.display = "none";
+        actionBuyItem.style.display  = "none";
         actionSkipItem.style.display = "none";
     },
 
@@ -122,7 +122,7 @@ const GameEngine = {
 
     processDiceThrow() {
         let currenDiceThrow = GameEngine.throwDice(6);
-        diceInfo.innerHTML = (GameEngine.players[this.currentPlayerIndex].name + ", you throw : " + currenDiceThrow);
+        diceInfo.innerHTML  = (GameEngine.players[this.currentPlayerIndex].name + ", you throw : " + currenDiceThrow);
         GameEngine.players[this.currentPlayerIndex].activeBox += currenDiceThrow;
         if (GameEngine.players[this.currentPlayerIndex].activeBox >= this.availableFields.length) {
             GameEngine.players[this.currentPlayerIndex].activeBox -= this.availableFields.length;
@@ -132,7 +132,7 @@ const GameEngine = {
         }
         throwDice.style.display = "none";
 
-        this.currentFieldIndex = GameEngine.players[this.currentPlayerIndex].activeBox;
+        this.currentFieldIndex  = GameEngine.players[this.currentPlayerIndex].activeBox;
 
         GameEngine.showItemInfo();
 
@@ -141,7 +141,7 @@ const GameEngine = {
             GameEngine.payTax()
         }
         if (GameEngine.availableFields[GameEngine.currentFieldIndex].owner == null) {
-            actionBuyItem.style.display = "inline-block";
+            actionBuyItem.style.display  = "inline-block";
             actionSkipItem.style.display = "inline-block";
         }
         if (GameEngine.players[this.currentPlayerIndex].id == GameEngine.availableFields[GameEngine.currentFieldIndex].owner) {
@@ -165,7 +165,6 @@ const GameEngine = {
         if (fieldInfo.id != 0) {
             template.push(`<br> <span> price: ${fieldInfo.price} </span>
             <br> <span> tax: ${fieldInfo.tax} </span> `);
-
         }
 
         if (fieldInfo.owner != null) {
@@ -189,9 +188,7 @@ const GameEngine = {
     buildGameBoardRow(startCol, endCol, cssClass) {
 
         let template = [];
-        template.push(`<div class = "${cssClass} row">
-      
-        `)
+        template.push(`<div class = "${cssClass} row"> `)
         for (let i = startCol; i < endCol; i++) {
             template.push(this.getBoxTemplate(this.availableFields[i]));
         }

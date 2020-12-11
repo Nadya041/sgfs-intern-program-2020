@@ -11,19 +11,15 @@ let playerTwoWallet = document.getElementById("player-two-wallet");
 
 
 throwDice.addEventListener("click", function () {
-
     GameEngine.processDiceThrow();
 });
 
 actionBuyItem.addEventListener('click', function () {
     GameEngine.buyItem()
-    
-
 });
 
 actionSkipItem.addEventListener('click', function () {
     GameEngine.skipItem()
-
 });
 
 
@@ -35,25 +31,50 @@ const GameEngine = {
     currentFieldIndex: 0,
 
 
+    handleGameOver() {
+        let thisPlayerWallet = GameEngine.players[this.currentPlayerIndex].wallet
+        let tax = GameEngine.availableFields[GameEngine.currentFieldIndex].tax
+        let owner = GameEngine.availableFields[GameEngine.currentFieldIndex].owner
+        let thisPlayer = GameEngine.players[this.currentPlayerIndex].id
+
+        if (thisPlayerWallet < tax && owner != thisPlayer) {
+            alert(thisPlayerName + ", GAME OVER!")
+            GameEngine.startGame();
+            return true
+        }
+        return false;
+    },
+
     showPlayerTurn() {
         playerInfoTurn.innerHTML = ("The player on turn is: " + GameEngine.players[this.currentPlayerIndex].name);
+        GameEngine.showPlayersWallet(1, playerOneWallet);
+        GameEngine.showPlayersWallet(2, playerTwoWallet);
     },
 
-    showPlayerOneWallet(){
-        playerOneWallet.innerHTML = ("You have " + GameEngine.players[this.currentPlayerIndex].wallet + " bgn in your wallet!" )
+
+    showPlayersWallet(id, walletContainer) {
+        let player = GameEngine.players.find(p => p.id == id);
+
+        walletContainer.innerHTML = player.name + ", you have " + player.wallet + " bgn in your wallet!"
+
     },
 
-    showPlayerTwoWallet(){
-        playerTwoWallet.innerHTML = ("You have " + GameEngine.players[this.currentPlayerIndex].wallet + " bgn in your wallet!" )
+
+    hideButtonsBuySkip() {
+        actionBuyItem.style.display = "none";
+        actionSkipItem.style.display = "none";
+    },
+
+    hideInfo() {
+        diceInfo.style.display = "none";
+        itemInfo.style.display = "none";
     },
 
     skipItem() {
 
-        actionBuyItem.style.display = "none";
-        actionSkipItem.style.display = "none";
         this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
-        diceInfo.style.display = "none"
-        itemInfo.style.display = "none"
+        GameEngine.hideButtonsBuySkip();
+        GameEngine.hideInfo();
         GameEngine.showPlayerTurn();
         throwDice.style.display = "inline-block";
 
@@ -64,17 +85,16 @@ const GameEngine = {
 
         const currentTax = GameEngine.availableFields[GameEngine.currentFieldIndex].tax
 
-        GameEngine.players[this.currentPlayerIndex].wallet -= currentTax
-        alert(GameEngine.players[this.currentPlayerIndex].name + ", you pay " + currentTax
-            + " tax to " + GameEngine.players.find(p => p.id == GameEngine.availableFields[GameEngine.currentFieldIndex].owner).name)
+        if (GameEngine.handleGameOver() == false) {
+            GameEngine.players[this.currentPlayerIndex].wallet -= currentTax
+            alert(GameEngine.players[this.currentPlayerIndex].name + ", you pay " + currentTax
+                + " tax to " + GameEngine.players.find(p => p.id == GameEngine.availableFields[GameEngine.currentFieldIndex].owner).name)
+            this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
 
-        this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
-
-        GameEngine.showPlayerTurn();
-       // GameEngine.showPlayerOneWallet();
-        // GameEngine.showPlayerTwoWallet();
-        GameEngine.players[this.currentPlayerIndex].wallet += currentTax;
-        throwDice.style.display = "inline-block";
+            GameEngine.showPlayerTurn();
+            GameEngine.players[this.currentPlayerIndex].wallet += currentTax;
+            throwDice.style.display = "inline-block";
+        }
 
     },
 
@@ -88,15 +108,11 @@ const GameEngine = {
         GameEngine.players[this.currentPlayerIndex].wallet -= GameEngine.availableFields[GameEngine.currentFieldIndex].price;
         GameEngine.availableFields[GameEngine.currentFieldIndex].owner = GameEngine.players[this.currentPlayerIndex].id;
 
-        actionBuyItem.style.display = "none";
-        actionSkipItem.style.display = "none";
-        diceInfo.style.display = "none"
-        itemInfo.style.display = "none"
-
+        GameEngine.hideButtonsBuySkip();
+        GameEngine.hideInfo();
         this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
         GameEngine.showPlayerTurn();
-      //  GameEngine.showPlayerOneWallet();
-      //  GameEngine.showPlayerTwoWallet();
+
         throwDice.style.display = "inline-block";
     },
 
@@ -110,10 +126,13 @@ const GameEngine = {
         GameEngine.players[this.currentPlayerIndex].activeBox += currenDiceThrow;
         if (GameEngine.players[this.currentPlayerIndex].activeBox >= this.availableFields.length) {
             GameEngine.players[this.currentPlayerIndex].activeBox -= this.availableFields.length;
+            GameEngine.players[this.currentPlayerIndex].wallet += 1000;
+            GameEngine.showPlayersWallet(1, playerOneWallet);
+            GameEngine.showPlayersWallet(2, playerTwoWallet);
         }
         throwDice.style.display = "none";
 
-        this.currentFieldIndex = GameEngine.players[this.currentPlayerIndex].activeBox
+        this.currentFieldIndex = GameEngine.players[this.currentPlayerIndex].activeBox;
 
         GameEngine.showItemInfo();
 
@@ -129,12 +148,12 @@ const GameEngine = {
             throwDice.style.display = "inline-block";
             this.currentPlayerIndex = this.currentPlayerIndex == 0 ? 1 : 0;
             GameEngine.showPlayerTurn();
-           // GameEngine.showPlayerOneWallet();
-           // GameEngine.showPlayerTwoWallet();
+
         }
         diceInfo.style.display = "block";
         itemInfo.style.display = "block";
         this.generateBoard();
+
     },
 
     drawBoard() {
@@ -192,12 +211,11 @@ const GameEngine = {
     },
 
     startGame() {
-        this.availableFields = [...availableFields]
-        this.players = [...availablePlayerCollection]
+        this.availableFields = [...availableFields];
+        this.players = [...availablePlayerCollection];
         this.generateBoard();
         this.showPlayerTurn();
-       // GameEngine.showPlayerOneWallet();
-       // GameEngine.showPlayerTwoWallet();
+
     },
 
     throwDice: (sideCount) => {
